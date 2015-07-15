@@ -15,6 +15,8 @@ public class Main {
 
 	private static final String TITLE = "Test VBO";
 	private static final int width = 1280, height = 720;
+	
+	private static Thread[] threadArray;
 
 	private static Game game;
 
@@ -29,11 +31,25 @@ public class Main {
 			Display.setResizable(true);
 			Mouse.setGrabbed(true);
 			Display.create();
+			threadArray = new Thread[Runtime.getRuntime().availableProcessors()];
 			game = new Game();
 			loop();
 		} catch (Exception e) {
 
 		}
+	}
+	
+	public static Thread addThread(Thread t){
+		for(Thread c : threadArray){
+			c = t;
+			try {
+				c.join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return t;
 	}
 
 	/**

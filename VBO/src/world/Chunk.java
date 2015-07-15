@@ -6,12 +6,14 @@ import math.*;
 
 public class Chunk {
 
-	public final static int SIZE = 4;
+	public final static int SIZE = 8;
 	private int x, y, z;
 	private VBO vbo;
 	private World world;
 	Block[][][] blocks;
 	private boolean IsLoad = false;
+	private boolean IsGenerated = false;
+	private boolean IsCurrentGenerate = false;
 
 	public Chunk(int x, int y, int z, World world) {
 		this.x = x;
@@ -27,26 +29,17 @@ public class Chunk {
 	}
 
 	public void update() {
-		
+
 	}
 
 	public void createChunk(World world) {
 		this.world = world;
-		for (int i = 0; i < SIZE; i++) {
-			for (int j = 0; j < 2; j++) {
-				for (int k = 0; k < SIZE; k++) {
-					blocks[i][j][k] = Block.GRASS;
-				}
-			}
-		}
-		for (int i = 0; i < SIZE; i++) {
-			for (int j = 0; j < 2; j++) {
-				for (int k = 0; k < SIZE; k++) {
-					loopChunk(i, j, k);
-				}
-			}
-		}
 
+		Main.addThread((new Thread(new Generate(this, world)))).start();
+		IsCurrentGenerate = true;
+	}
+
+	public void loadBufferData() {
 		vbo.bufferData();
 		IsLoad = true;
 	}
@@ -79,20 +72,20 @@ public class Chunk {
 		return z;
 	}
 
-	public Vector3f getPosition(){
-		return new Vector3f(x,y,z);
+	public Vector3f getPosition() {
+		return new Vector3f(x, y, z);
 	}
-	
+
 	public Block getBlock(int x, int y, int z) {
 		if (x < 0 || y < 0 || z < 0 || x >= SIZE || y >= SIZE || z >= SIZE)
 			return null;
 		return blocks[x][y][z];
 	}
 
-	public void destroyChunk(){
+	public void destroyChunk() {
 		vbo.destroyVBO();
 	}
-	
+
 	public void loopChunk(int x, int y, int z) {
 		int xx = this.x * SIZE + x;
 		int yy = this.y * SIZE + y;
@@ -255,7 +248,50 @@ public class Chunk {
 	public boolean isLoaded() {
 		return IsLoad;
 	}
-	
-	
-	
+
+	public boolean isGenerated() {
+		return IsGenerated;
+	}
+
+	public void setGenerated(boolean g) {
+		IsGenerated = g;
+	}
+
+	public boolean isCurrentGenerate(){
+		return IsCurrentGenerate;
+	}
+}
+
+class Generate implements Runnable {
+
+	private Chunk chunk;
+	private World world;
+
+	public Generate(Chunk chunk, World world) {
+		this.chunk = chunk;
+		this.world = world;
+	}
+
+	public void run() {
+		for (int i = 0; i < chunk.SIZE; i++) {
+			for (int j = 0; j < 2; j++) {
+				for (int k = 0; k < chunk.SIZE; k++) {
+					chunk.blocks[i][j][k] = Block.GRASS;
+				}
+			}
+		}
+		synchronized (world.chunks) {
+			for (int i = 0; i < chunk.SIZE; i++) {
+				for (int j = 0; j < 2; j++) {
+					for (int k = 0; k < chunk.SIZE; k++) {
+						chunk.loopChunk(i, j, k);
+					}
+				}
+			}
+		}
+		chunk.setGenerated(true);
+		System.out.println(Thread.currentThread().getName());
+		Thread.currentThread().stop();
+	}
+
 }

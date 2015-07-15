@@ -11,7 +11,7 @@ public class World {
 	public long seed;
 	public final int SIZE = 1,HEIGHT = 1;
 	public static final float GRAVITY = 1;
-	public static final int VIEW_CHUNK = 2;
+	public static final int VIEW_CHUNK = 4;
 	
 	public ArrayList<Chunk> chunks = new ArrayList<Chunk>();
 	
@@ -34,16 +34,15 @@ public class World {
 		int za = (int)((Camera.getPosition().getZ()-((float)Chunk.SIZE/2.0f))/(float)Chunk.SIZE) - VIEW_CHUNK;
 		int zb = (int)((Camera.getPosition().getZ()-((float)Chunk.SIZE/2.0f))/(float)Chunk.SIZE) + VIEW_CHUNK;
 		
+				
 		int delta_x = xb - xa;
 		int delta_z = zb - za;
-		boolean isC = false;
 		for(int i = 0; i <= delta_x;i++){
 			for(int k = 0;k <= delta_z;k++){
 				for(int j = 0; j < HEIGHT; j++){
 					if(getChunk((xa + i), 0, (za + k)) == null){
 						Chunk ch = new Chunk((xa + i),j,(za + k),this);
 						chunks.add(ch);
-						isC = true;
 					}
 				}
 			}
@@ -57,7 +56,8 @@ public class World {
 			}
 		}
 		for(Chunk c : chunks){
-			if(!c.isLoaded())c.createChunk(this);
+			if(!c.isLoaded() && !c.isGenerated() && !c.isCurrentGenerate())c.createChunk(this);
+			if(!c.isLoaded() && c.isGenerated())c.loadBufferData();
 			c.update();
 		}
 		System.gc();
@@ -72,7 +72,9 @@ public class World {
 	
 	public Chunk getChunk(int xc, int yc, int zc) {
 		Chunk c = null;
-		for(Chunk ch : chunks){
+		Object[] chunk = chunks.toArray();
+		for(int i = 0;i < chunk.length;i++){
+			Chunk ch = (Chunk)chunk[i];
 			if(ch.getX() == xc && ch.getY() == yc && ch.getZ() == zc){
 				c = ch;
 				break;
