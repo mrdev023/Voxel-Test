@@ -87,6 +87,7 @@ public class VBO {
 	public void bufferData(){
 		glBindBuffer(GL_ARRAY_BUFFER, vboID);
 		glBufferData(GL_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
+//		glBufferSubData(vboID, 0, buffer);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		bufferSize = buffer.limit() / 7;// 7 = 3 vertex(x,y,z) + 4 color (r,g,b,a)
 	}
