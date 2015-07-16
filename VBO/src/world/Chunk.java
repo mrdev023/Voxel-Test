@@ -1,5 +1,6 @@
 package world;
 
+import vanilla.java.affinity.*;
 import blocks.*;
 import main.*;
 import math.*;
@@ -14,12 +15,15 @@ public class Chunk {
 	private boolean IsLoad = false;
 	private boolean IsGenerated = false;
 	private boolean IsCurrentGenerate = false;
+	private boolean IsDestroy = false;
+	private WorldNoise worldNoise;
 
-	public Chunk(int x, int y, int z, World world) {
+	public Chunk(int x, int y, int z, World world,WorldNoise worldNoise) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 		this.world = world;
+		this.worldNoise = worldNoise;
 		this.blocks = new Block[SIZE][SIZE][SIZE];
 		vbo = new VBO();
 	}
@@ -35,7 +39,7 @@ public class Chunk {
 	public void createChunk(World world) {
 		this.world = world;
 
-		Main.addThread((new Thread(new Generate(this, world)))).start();
+		Main.addThread(new Generate(this, world),"Create Chunk");
 		IsCurrentGenerate = true;
 	}
 
@@ -84,6 +88,7 @@ public class Chunk {
 
 	public void destroyChunk() {
 		vbo.destroyVBO();
+		IsDestroy = false;
 	}
 
 	public void loopChunk(int x, int y, int z) {
@@ -107,7 +112,13 @@ public class Chunk {
 		// up + 1 = down - 1 = y
 		// left - 1 = right + 1 = x
 		// front - 1 = back + 1 = z
-
+//		up = true;
+//		down = true;
+//		left = true;
+//		right = true;
+//		back = true;
+//		front = true;
+		
 		if (up) {
 			// aa ab bb ba
 			float[] a = new float[] { 1, 1, 1, 1 };
@@ -260,6 +271,20 @@ public class Chunk {
 	public boolean isCurrentGenerate(){
 		return IsCurrentGenerate;
 	}
+
+	public boolean isDestroy() {
+		return IsDestroy;
+	}
+
+	public WorldNoise getWorldNoise() {
+		return worldNoise;
+	}
+
+	public void setWorldNoise(WorldNoise worldNoise) {
+		this.worldNoise = worldNoise;
+	}
+	
+	
 }
 
 class Generate implements Runnable {
@@ -271,27 +296,63 @@ class Generate implements Runnable {
 		this.chunk = chunk;
 		this.world = world;
 	}
+	
+	/*
+	 * boolean grounded = noise.getNoise(xx, zz) > yy - 1 && noise.getNoise(xx, zz) < yy;
+					
+					float percentOfSpawnTree = 0.005f;
+					if(random.nextFloat() < percentOfSpawnTree && grounded){
+						if(random.nextInt(2) == 0)
+							Tree.addOak(world, xx, yy, zz);
+						else
+							Tree.addFir(world, xx, yy, zz);
+		}(non-Javadoc)
+	 * @see java.lang.Runnable#run()
+	 */
 
 	public void run() {
-		for (int i = 0; i < chunk.SIZE; i++) {
-			for (int j = 0; j < 2; j++) {
-				for (int k = 0; k < chunk.SIZE; k++) {
-					chunk.blocks[i][j][k] = Block.GRASS;
-				}
-			}
-		}
-		synchronized (world.chunks) {
-			for (int i = 0; i < chunk.SIZE; i++) {
-				for (int j = 0; j < 2; j++) {
-					for (int k = 0; k < chunk.SIZE; k++) {
-						chunk.loopChunk(i, j, k);
+		AffinityLock al = null;
+		int cpuId = 0;
+		try{
+			al = AffinityLock.acquireCore();
+		}catch(Exception e){}
+		long current = System.currentTimeMillis();
+		boolean IsError = true;
+		Noise noise = new Noise(world.seed, 20, 5);
+		for (int x = 0; x < chunk.SIZE; x++) {
+			for (int z = 0; z < chunk.SIZE; z++) {
+				for (int y = 0; y < chunk.SIZE; y++) {
+					int xx = chunk.getX() * chunk.SIZE + x;
+					int yy = chunk.getY() * chunk.SIZE + y;
+					int zz = chunk.getZ() * chunk.SIZE + z;
+					if(noise.getNoise(xx, zz) > yy){
+						chunk.blocks[x][y][z] = Block.GRASS;
+					}else{
+						continue;
 					}
 				}
 			}
 		}
-		chunk.setGenerated(true);
-		System.out.println(Thread.currentThread().getName());
+		while(IsError){
+			IsError = false;
+			try{
+				synchronized (world.chunks) {
+					for (int i = 0; i < chunk.SIZE; i++) {
+						for (int j = 0; j < chunk.SIZE; j++) {
+							for (int k = 0; k < chunk.SIZE; k++) {
+								chunk.loopChunk(i, j, k);
+							}
+						}
+					}
+				}
+				chunk.setGenerated(true);
+			}catch (Exception e){
+				IsError = true;
+			}
+		}
+		System.out.println(Thread.currentThread().getName() + " | " + (System.currentTimeMillis()-current) + " | " + cpuId);
 		Thread.currentThread().stop();
+		al.release();
 	}
 
 }

@@ -1,9 +1,13 @@
 package main;
 
+import java.util.concurrent.*;
+
 import org.lwjgl.input.*;
 import org.lwjgl.opengl.*;
 
 import rendering.*;
+import vanilla.java.affinity.*;
+import vanilla.java.affinity.impl.*;
 
 public class Main {
 
@@ -16,8 +20,9 @@ public class Main {
 	private static final String TITLE = "Test VBO";
 	private static final int width = 1280, height = 720;
 	
-	private static Thread[] threadArray;
 
+	private static AffinityLock al;
+	
 	private static Game game;
 
 	/**
@@ -25,13 +30,16 @@ public class Main {
 	 * @Info Fonction principal
 	 */
 	public static void main(String[] args) {
+//		mainPool = new ForkJoinPool(Runtime.getRuntime().availableProcessors());
+//		AffinityLock.cpuLayout(new NoCpuLayout(Runtime.getRuntime().availableProcessors() + 8));
+		al = AffinityLock.acquireLock();
+		System.out.println(AffinityLock.cpuLayout().coresPerSocket());
 		try {
 			Display.setTitle(TITLE);
 			Display.setDisplayMode(new DisplayMode(width, height));
 			Display.setResizable(true);
 			Mouse.setGrabbed(true);
 			Display.create();
-			threadArray = new Thread[Runtime.getRuntime().availableProcessors()];
 			game = new Game();
 			loop();
 		} catch (Exception e) {
@@ -39,16 +47,10 @@ public class Main {
 		}
 	}
 	
-	public static Thread addThread(Thread t){
-		for(Thread c : threadArray){
-			c = t;
-			try {
-				c.join();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+	public static Runnable addThread(Runnable t,String name){
+//		mainPool.execute(t);
+		new Thread(t, name).start();
+//		System.out.println("Details" + AffinityLock.dumpLocks());
 		return t;
 	}
 

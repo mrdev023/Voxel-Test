@@ -11,16 +11,18 @@ public class World {
 	public long seed;
 	public final int SIZE = 1,HEIGHT = 1;
 	public static final float GRAVITY = 1;
-	public static final int VIEW_CHUNK = 4;
+	public static final int VIEW_CHUNK = 2;
+	public static WorldNoise worldNoise;
 	
 	public ArrayList<Chunk> chunks = new ArrayList<Chunk>();
 	
 	public World(long seed){
 		this.seed= seed;
+		this.worldNoise = new WorldNoise(seed);
 		for(int x = 0;x < SIZE;x++){
 			for(int y = 0;y < HEIGHT;y++){
 				for(int z = 0;z < SIZE;z++){
-					Chunk ch = new Chunk(x,y,z,this);
+					Chunk ch = new Chunk(x,y,z,this,worldNoise);
 					chunks.add(ch);
 				}
 			}
@@ -41,24 +43,28 @@ public class World {
 			for(int k = 0;k <= delta_z;k++){
 				for(int j = 0; j < HEIGHT; j++){
 					if(getChunk((xa + i), 0, (za + k)) == null){
-						Chunk ch = new Chunk((xa + i),j,(za + k),this);
+						Chunk ch = new Chunk((xa + i),j,(za + k),this,worldNoise);
 						chunks.add(ch);
 					}
 				}
 			}
 		}
+		ArrayList<Chunk> removeList = new ArrayList<Chunk>();
 		for(int i = 0; i < chunks.size();i++){
 			Chunk c = chunks.get(i);
 			if(c.getPosition().getX() < xa || c.getPosition().getX() > xb || c.getPosition().getZ() < za || c.getPosition().getZ() > zb){
 				c.destroyChunk();
-				chunks.remove(i);
-				break;
+				removeList.add(c);
 			}
 		}
+		for(Chunk c: removeList){
+			removeByChunk(c);
+		}
+		removeList.clear();		
 		for(Chunk c : chunks){
-			if(!c.isLoaded() && !c.isGenerated() && !c.isCurrentGenerate())c.createChunk(this);
-			if(!c.isLoaded() && c.isGenerated())c.loadBufferData();
-			c.update();
+			if(!c.isLoaded() && !c.isGenerated() && !c.isCurrentGenerate() && !c.isDestroy())c.createChunk(this);
+			if(!c.isLoaded() && c.isGenerated() && !c.isDestroy())c.loadBufferData();
+			if(!c.isDestroy())c.update();
 		}
 		System.gc();
 	}
@@ -67,6 +73,14 @@ public class World {
 		for(Chunk c : chunks){
 			if(c.isLoaded())
 			c.render();
+		}
+	}
+	
+	public void removeByChunk(Chunk ch){
+		for(int i = 0;i < chunks.size();i++){
+			if(chunks.get(i).equals(ch)){
+				chunks.remove(i);
+			}
 		}
 	}
 	
@@ -94,6 +108,16 @@ public class World {
 		int xb = x % Chunk.SIZE;
 		int yb = y % Chunk.SIZE;
 		int zb = z % Chunk.SIZE;
+		
+//		if(xb < 0){
+//			xb = -xb;
+//		}
+//		if(yb < 0){
+//			yb = -yb;
+//		}
+//		if(zb < 0){
+//			zb = -zb;
+//		}
 
 		return chunk.getBlock(xb, yb, zb);
 	}
