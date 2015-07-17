@@ -11,7 +11,7 @@ public class World {
 	public long seed;
 	public final int SIZE = 1,HEIGHT = 1;
 	public static final float GRAVITY = 1;
-	public static final int VIEW_CHUNK = 8;
+	public static final int VIEW_CHUNK = 4;
 	public static WorldNoise worldNoise;
 	
 	public ArrayList<Chunk> chunks = new ArrayList<Chunk>();
@@ -30,7 +30,9 @@ public class World {
 		for(Chunk ch : chunks)ch.createChunk(this);
 	}
 	
+	public static long updateWorldTime = 0;
 	public void update(){
+		long current = System.currentTimeMillis();
 		int xa = (int)((Camera.getPosition().getX()-((float)Chunk.SIZE/2.0f))/(float)Chunk.SIZE) - VIEW_CHUNK;
 		int xb = (int)((Camera.getPosition().getX()-((float)Chunk.SIZE/2.0f))/(float)Chunk.SIZE) + VIEW_CHUNK;
 		int za = (int)((Camera.getPosition().getZ()-((float)Chunk.SIZE/2.0f))/(float)Chunk.SIZE) - VIEW_CHUNK;
@@ -41,12 +43,11 @@ public class World {
 		int delta_z = zb - za;
 		for(int i = 0; i <= delta_x;i++){
 			for(int k = 0;k <= delta_z;k++){
-				for(int j = 0; j < HEIGHT; j++){
-					if(getChunk((xa + i), 0, (za + k)) == null){
-						Chunk ch = new Chunk((xa + i),j,(za + k),this,worldNoise);
-						chunks.add(ch);
-					}
-				}
+//				for(int j = 0; j < HEIGHT; j++){
+					if(getChunk((xa + i), 0, (za + k)) != null)continue;
+					Chunk ch = new Chunk((xa + i),0,(za + k),this,worldNoise);
+					chunks.add(ch);
+//				}
 			}
 		}
 		ArrayList<Chunk> removeList = new ArrayList<Chunk>();
@@ -55,18 +56,17 @@ public class World {
 			if(c.getPosition().getX() < xa || c.getPosition().getX() > xb || c.getPosition().getZ() < za || c.getPosition().getZ() > zb){
 				c.destroyChunk();
 				removeList.add(c);
+			}else{
+				if(!c.isLoaded() && !c.isGenerated() && !c.isCurrentGenerate() && !c.isDestroy())c.createChunk(this);
+				if(!c.isLoaded() && c.isGenerated() && !c.isDestroy())c.loadBufferData();
+				if(!c.isDestroy())c.update();
 			}
 		}
 		for(Chunk c: removeList){
 			removeByChunk(c);
 		}
-		removeList.clear();		
-		for(Chunk c : chunks){
-			if(!c.isLoaded() && !c.isGenerated() && !c.isCurrentGenerate() && !c.isDestroy())c.createChunk(this);
-			if(!c.isLoaded() && c.isGenerated() && !c.isDestroy())c.loadBufferData();
-			if(!c.isDestroy())c.update();
-		}
-		System.gc();
+		removeList.clear();
+		updateWorldTime = System.currentTimeMillis() - current;
 	}
 	
 	public void render(){

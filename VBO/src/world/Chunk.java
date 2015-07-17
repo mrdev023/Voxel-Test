@@ -11,7 +11,7 @@ import math.*;
 
 public class Chunk {
 
-	public final static int SIZE = 8;
+	public final static int SIZE = 16;
 	private int x, y, z;
 	private VBO vbo;
 	private World world;
@@ -111,12 +111,12 @@ public class Chunk {
 		boolean right = true;
 		boolean back = true;
 		boolean front = true;
-		up = world.getBlock(xx, yy + 1, zz) == null;
-		down = world.getBlock(xx, yy - 1, zz) == null;
-		left = world.getBlock(xx - 1, yy, zz) == null;
-		right = world.getBlock(xx + 1, yy, zz) == null;
-		front = world.getBlock(xx, yy, zz - 1) == null;
-		back = world.getBlock(xx, yy, zz + 1) == null;
+//		up = world.getBlock(xx, yy + 1, zz) == null;
+//		down = world.getBlock(xx, yy - 1, zz) == null;
+//		left = world.getBlock(xx - 1, yy, zz) == null;
+//		right = world.getBlock(xx + 1, yy, zz) == null;
+//		front = world.getBlock(xx, yy, zz - 1) == null;
+//		back = world.getBlock(xx, yy, zz + 1) == null;
 		if (!up && !down && !left && !right && !front && !back)
 			return;
 		if (blocks[x][y][z] == null)
@@ -133,22 +133,22 @@ public class Chunk {
 			// aa ab bb ba
 			float[] a = new float[] { 1, 1, 1, 1 };
 
-			if (world.getBlock(xx - 1, yy + 1, zz) != null
-					|| world.getBlock(xx - 1, yy + 1, zz - 1) != null
-					|| world.getBlock(xx, yy + 1, zz - 1) != null)
-				a[0] = ao;
-			if (world.getBlock(xx + 1, yy + 1, zz) != null
-					|| world.getBlock(xx + 1, yy + 1, zz - 1) != null
-					|| world.getBlock(xx, yy + 1, zz - 1) != null)
-				a[1] = ao;
-			if (world.getBlock(xx + 1, yy + 1, zz) != null
-					|| world.getBlock(xx + 1, yy + 1, zz + 1) != null
-					|| world.getBlock(xx, yy + 1, zz + 1) != null)
-				a[2] = ao;
-			if (world.getBlock(xx - 1, yy + 1, zz) != null
-					|| world.getBlock(xx - 1, yy + 1, zz + 1) != null
-					|| world.getBlock(xx, yy + 1, zz + 1) != null)
-				a[3] = ao;
+//			if (world.getBlock(xx - 1, yy + 1, zz) != null
+//					|| world.getBlock(xx - 1, yy + 1, zz - 1) != null
+//					|| world.getBlock(xx, yy + 1, zz - 1) != null)
+//				a[0] = ao;
+//			if (world.getBlock(xx + 1, yy + 1, zz) != null
+//					|| world.getBlock(xx + 1, yy + 1, zz - 1) != null
+//					|| world.getBlock(xx, yy + 1, zz - 1) != null)
+//				a[1] = ao;
+//			if (world.getBlock(xx + 1, yy + 1, zz) != null
+//					|| world.getBlock(xx + 1, yy + 1, zz + 1) != null
+//					|| world.getBlock(xx, yy + 1, zz + 1) != null)
+//				a[2] = ao;
+//			if (world.getBlock(xx - 1, yy + 1, zz) != null
+//					|| world.getBlock(xx - 1, yy + 1, zz + 1) != null
+//					|| world.getBlock(xx, yy + 1, zz + 1) != null)
+//				a[3] = ao;
 
 			vbo.addDataByFloatArray(b.getDataUp(xx, yy, zz, a));
 		}
@@ -156,22 +156,22 @@ public class Chunk {
 			float[] a = new float[] { 1, 1, 1, 1 };
 			// ambient occlusion
 
-			if (world.getBlock(xx - 1, yy - 1, zz) != null
-					|| world.getBlock(xx - 1, yy - 1, zz - 1) != null
-					|| world.getBlock(xx, yy - 1, zz - 1) != null)
-				a[1] = ao;
-			if (world.getBlock(xx + 1, yy - 1, zz) != null
-					|| world.getBlock(xx + 1, yy - 1, zz - 1) != null
-					|| world.getBlock(xx, yy - 1, zz - 1) != null)
-				a[0] = ao;
-			if (world.getBlock(xx + 1, yy - 1, zz) != null
-					|| world.getBlock(xx + 1, yy - 1, zz + 1) != null
-					|| world.getBlock(xx, yy - 1, zz + 1) != null)
-				a[3] = ao;
-			if (world.getBlock(xx - 1, yy - 1, zz) != null
-					|| world.getBlock(xx - 1, yy - 1, zz + 1) != null
-					|| world.getBlock(xx, yy - 1, zz + 1) != null)
-				a[2] = ao;
+//			if (world.getBlock(xx - 1, yy - 1, zz) != null
+//					|| world.getBlock(xx - 1, yy - 1, zz - 1) != null
+//					|| world.getBlock(xx, yy - 1, zz - 1) != null)
+//				a[1] = ao;
+//			if (world.getBlock(xx + 1, yy - 1, zz) != null
+//					|| world.getBlock(xx + 1, yy - 1, zz - 1) != null
+//					|| world.getBlock(xx, yy - 1, zz - 1) != null)
+//				a[0] = ao;
+//			if (world.getBlock(xx + 1, yy - 1, zz) != null
+//					|| world.getBlock(xx + 1, yy - 1, zz + 1) != null
+//					|| world.getBlock(xx, yy - 1, zz + 1) != null)
+//				a[3] = ao;
+//			if (world.getBlock(xx - 1, yy - 1, zz) != null
+//					|| world.getBlock(xx - 1, yy - 1, zz + 1) != null
+//					|| world.getBlock(xx, yy - 1, zz + 1) != null)
+//				a[2] = ao;
 
 			// affiche la face si il n'y a rien en dessous
 			vbo.addDataByFloatArray(b.getDataDown(xx, yy, zz, a));
@@ -179,88 +179,88 @@ public class Chunk {
 		if (left) {
 			float[] a = new float[] { 1, 1, 1, 1 };
 
-			if (world.getBlock(xx - 1, yy - 1, zz) != null
-					|| world.getBlock(xx - 1, yy - 1, zz - 1) != null
-					|| world.getBlock(xx - 1, yy, zz - 1) != null)
-				a[0] = ao;
-			if (world.getBlock(xx - 1, yy + 1, zz) != null
-					|| world.getBlock(xx - 1, yy + 1, zz - 1) != null
-					|| world.getBlock(xx - 1, yy, zz - 1) != null)
-				a[1] = ao;
-			if (world.getBlock(xx - 1, yy + 1, zz) != null
-					|| world.getBlock(xx - 1, yy + 1, zz + 1) != null
-					|| world.getBlock(xx - 1, yy, zz + 1) != null)
-				a[2] = ao;
-			if (world.getBlock(xx - 1, yy - 1, zz) != null
-					|| world.getBlock(xx - 1, yy - 1, zz + 1) != null
-					|| world.getBlock(xx - 1, yy, zz + 1) != null)
-				a[3] = ao;
+//			if (world.getBlock(xx - 1, yy - 1, zz) != null
+//					|| world.getBlock(xx - 1, yy - 1, zz - 1) != null
+//					|| world.getBlock(xx - 1, yy, zz - 1) != null)
+//				a[0] = ao;
+//			if (world.getBlock(xx - 1, yy + 1, zz) != null
+//					|| world.getBlock(xx - 1, yy + 1, zz - 1) != null
+//					|| world.getBlock(xx - 1, yy, zz - 1) != null)
+//				a[1] = ao;
+//			if (world.getBlock(xx - 1, yy + 1, zz) != null
+//					|| world.getBlock(xx - 1, yy + 1, zz + 1) != null
+//					|| world.getBlock(xx - 1, yy, zz + 1) != null)
+//				a[2] = ao;
+//			if (world.getBlock(xx - 1, yy - 1, zz) != null
+//					|| world.getBlock(xx - 1, yy - 1, zz + 1) != null
+//					|| world.getBlock(xx - 1, yy, zz + 1) != null)
+//				a[3] = ao;
 
 			vbo.addDataByFloatArray(b.getDataLeft(xx, yy, zz, a));
 		}
 		if (right) {
 			float[] a = new float[] { 1, 1, 1, 1 };
 
-			if (world.getBlock(xx + 1, yy - 1, zz) != null
-					|| world.getBlock(xx + 1, yy - 1, zz - 1) != null
-					|| world.getBlock(xx + 1, yy, zz - 1) != null)
-				a[1] = ao;
-			if (world.getBlock(xx + 1, yy + 1, zz) != null
-					|| world.getBlock(xx + 1, yy + 1, zz - 1) != null
-					|| world.getBlock(xx + 1, yy, zz - 1) != null)
-				a[0] = ao;
-			if (world.getBlock(xx + 1, yy + 1, zz) != null
-					|| world.getBlock(xx + 1, yy + 1, zz + 1) != null
-					|| world.getBlock(xx + 1, yy, zz + 1) != null)
-				a[3] = ao;
-			if (world.getBlock(xx + 1, yy - 1, zz) != null
-					|| world.getBlock(xx + 1, yy - 1, zz + 1) != null
-					|| world.getBlock(xx + 1, yy, zz + 1) != null)
-				a[2] = ao;
+//			if (world.getBlock(xx + 1, yy - 1, zz) != null
+//					|| world.getBlock(xx + 1, yy - 1, zz - 1) != null
+//					|| world.getBlock(xx + 1, yy, zz - 1) != null)
+//				a[1] = ao;
+//			if (world.getBlock(xx + 1, yy + 1, zz) != null
+//					|| world.getBlock(xx + 1, yy + 1, zz - 1) != null
+//					|| world.getBlock(xx + 1, yy, zz - 1) != null)
+//				a[0] = ao;
+//			if (world.getBlock(xx + 1, yy + 1, zz) != null
+//					|| world.getBlock(xx + 1, yy + 1, zz + 1) != null
+//					|| world.getBlock(xx + 1, yy, zz + 1) != null)
+//				a[3] = ao;
+//			if (world.getBlock(xx + 1, yy - 1, zz) != null
+//					|| world.getBlock(xx + 1, yy - 1, zz + 1) != null
+//					|| world.getBlock(xx + 1, yy, zz + 1) != null)
+//				a[2] = ao;
 
 			vbo.addDataByFloatArray(b.getDataRight(xx, yy, zz, a));
 		}
 		if (front) {
 			float[] a = new float[] { 1, 1, 1, 1 };
 
-			if (world.getBlock(xx, yy - 1, zz - 1) != null
-					|| world.getBlock(xx - 1, yy - 1, zz - 1) != null
-					|| world.getBlock(xx - 1, yy, zz - 1) != null)
-				a[0] = ao;
-			if (world.getBlock(xx, yy + 1, zz - 1) != null
-					|| world.getBlock(xx - 1, yy + 1, zz - 1) != null
-					|| world.getBlock(xx - 1, yy, zz - 1) != null)
-				a[3] = ao;
-			if (world.getBlock(xx, yy + 1, zz - 1) != null
-					|| world.getBlock(xx + 1, yy + 1, zz - 1) != null
-					|| world.getBlock(xx + 1, yy, zz - 1) != null)
-				a[2] = ao;
-			if (world.getBlock(xx, yy - 1, zz - 1) != null
-					|| world.getBlock(xx + 1, yy - 1, zz - 1) != null
-					|| world.getBlock(xx + 1, yy, zz - 1) != null)
-				a[1] = ao;
+//			if (world.getBlock(xx, yy - 1, zz - 1) != null
+//					|| world.getBlock(xx - 1, yy - 1, zz - 1) != null
+//					|| world.getBlock(xx - 1, yy, zz - 1) != null)
+//				a[0] = ao;
+//			if (world.getBlock(xx, yy + 1, zz - 1) != null
+//					|| world.getBlock(xx - 1, yy + 1, zz - 1) != null
+//					|| world.getBlock(xx - 1, yy, zz - 1) != null)
+//				a[3] = ao;
+//			if (world.getBlock(xx, yy + 1, zz - 1) != null
+//					|| world.getBlock(xx + 1, yy + 1, zz - 1) != null
+//					|| world.getBlock(xx + 1, yy, zz - 1) != null)
+//				a[2] = ao;
+//			if (world.getBlock(xx, yy - 1, zz - 1) != null
+//					|| world.getBlock(xx + 1, yy - 1, zz - 1) != null
+//					|| world.getBlock(xx + 1, yy, zz - 1) != null)
+//				a[1] = ao;
 
 			vbo.addDataByFloatArray(b.getDataFront(xx, yy, zz, a));
 		}
 		if (back) {
 			float[] a = new float[] { 1, 1, 1, 1 };
 
-			if (world.getBlock(xx, yy - 1, zz + 1) != null
-					|| world.getBlock(xx - 1, yy - 1, zz + 1) != null
-					|| world.getBlock(xx - 1, yy, zz + 1) != null)
-				a[1] = ao;
-			if (world.getBlock(xx, yy + 1, zz + 1) != null
-					|| world.getBlock(xx - 1, yy + 1, zz + 1) != null
-					|| world.getBlock(xx - 1, yy, zz + 1) != null)
-				a[2] = ao;
-			if (world.getBlock(xx, yy + 1, zz + 1) != null
-					|| world.getBlock(xx + 1, yy + 1, zz + 1) != null
-					|| world.getBlock(xx + 1, yy, zz + 1) != null)
-				a[3] = ao;
-			if (world.getBlock(xx, yy - 1, zz + 1) != null
-					|| world.getBlock(xx + 1, yy - 1, zz + 1) != null
-					|| world.getBlock(xx + 1, yy, zz + 1) != null)
-				a[0] = ao;
+//			if (world.getBlock(xx, yy - 1, zz + 1) != null
+//					|| world.getBlock(xx - 1, yy - 1, zz + 1) != null
+//					|| world.getBlock(xx - 1, yy, zz + 1) != null)
+//				a[1] = ao;
+//			if (world.getBlock(xx, yy + 1, zz + 1) != null
+//					|| world.getBlock(xx - 1, yy + 1, zz + 1) != null
+//					|| world.getBlock(xx - 1, yy, zz + 1) != null)
+//				a[2] = ao;
+//			if (world.getBlock(xx, yy + 1, zz + 1) != null
+//					|| world.getBlock(xx + 1, yy + 1, zz + 1) != null
+//					|| world.getBlock(xx + 1, yy, zz + 1) != null)
+//				a[3] = ao;
+//			if (world.getBlock(xx, yy - 1, zz + 1) != null
+//					|| world.getBlock(xx + 1, yy - 1, zz + 1) != null
+//					|| world.getBlock(xx + 1, yy, zz + 1) != null)
+//				a[0] = ao;
 
 			vbo.addDataByFloatArray(b.getDataBack(xx, yy, zz, a));
 		}
@@ -321,19 +321,13 @@ class Generate implements Runnable {
 	 */
 
 	public void run() {
-//		AffinityLock al = null;
-//		int cpuId = 0;
-//		try{
-//			al = AffinityLock.acquireLock();
-//		}catch(Exception e){}
 		long current = System.currentTimeMillis();
+		long elapsed1 = 0;
 		boolean IsError = true;
 		Noise noise = new Noise(world.seed, 30, 7);
 		Random random = new Random(world.seed);
 		for (int x = 0; x < chunk.SIZE; x++) {
 			for (int z = 0; z < chunk.SIZE; z++) {
-//				for (int y = 0; y < chunk.SIZE; y++) {
-				
 					int xa = (int)((Camera.getPosition().getX()-((float)Chunk.SIZE/2.0f))/(float)Chunk.SIZE) - World.VIEW_CHUNK;
 					int xb = (int)((Camera.getPosition().getX()-((float)Chunk.SIZE/2.0f))/(float)Chunk.SIZE) + World.VIEW_CHUNK;
 					int za = (int)((Camera.getPosition().getZ()-((float)Chunk.SIZE/2.0f))/(float)Chunk.SIZE) - World.VIEW_CHUNK;
@@ -344,32 +338,19 @@ class Generate implements Runnable {
 						return;
 					}
 					int xx = chunk.getX() * chunk.SIZE + x;
-//					int yy = chunk.getY() * chunk.SIZE + y;
 					int zz = chunk.getZ() * chunk.SIZE + z;
-//					if(noise.getNoise(xx, zz) > yy){
-//						chunk.blocks[x][y][z] = Block.GRASS;
-//					}else{
-//						continue;
-//					}
+
 					chunk.blocks[x][(int)noise.getNoise(xx, zz)][z] = Block.GRASS;
-//					
-//					float percentOfSpawnTree = 0.0005f;
-//					if(random.nextFloat() < percentOfSpawnTree){
-//						if(random.nextInt(2) == 0)
-//							Tree.addOak(world, xx, (int)noise.getNoise(xx, zz) - 1, zz);
-//						else
-//							Tree.addFir(world, xx, (int)noise.getNoise(xx, zz) - 1, zz);
-//					}
-					
-//				}
+
 			}
 		}
+		elapsed1 = System.currentTimeMillis() - current;
 		while(IsError){
 			IsError = false;
 			try{
-				synchronized (world.chunks) {
+//				synchronized (world.chunks) {
 					for (int i = 0; i < chunk.SIZE; i++) {
-						for (int j = 0; j < chunk.SIZE; j++) {
+//						for (int j = 0; j < chunk.SIZE; j++) {
 							for (int k = 0; k < chunk.SIZE; k++) {
 								int xa = (int)((Camera.getPosition().getX()-((float)Chunk.SIZE/2.0f))/(float)Chunk.SIZE) - World.VIEW_CHUNK;
 								int xb = (int)((Camera.getPosition().getX()-((float)Chunk.SIZE/2.0f))/(float)Chunk.SIZE) + World.VIEW_CHUNK;
@@ -380,19 +361,21 @@ class Generate implements Runnable {
 									Thread.currentThread().stop();
 									return;
 								}
-								chunk.loopChunk(i, j, k);
+								int xx = chunk.getX() * chunk.SIZE + i;
+								int zz = chunk.getZ() * chunk.SIZE + k;
+								chunk.loopChunk(i, (int)noise.getNoise(xx, zz), k);
 							}
-						}
+//						}
 					}
-				}
+//				}
 				chunk.setGenerated(true);
 			}catch (Exception e){
+				e.printStackTrace();
 				IsError = true;
 			}
 		}
-		System.out.println(Thread.currentThread().getName() + " terminated | " + (System.currentTimeMillis()-current));
+		System.out.println(Thread.currentThread().getName() + " terminated | loop1:" + elapsed1 + "ms loop2:" + (System.currentTimeMillis()-current) + "ms");
 		Thread.currentThread().stop();
-//		al.release();
 	}
 
 }

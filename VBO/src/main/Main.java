@@ -10,11 +10,12 @@ import org.lwjgl.opengl.*;
 import rendering.*;
 import vanilla.java.affinity.*;
 import vanilla.java.affinity.impl.*;
+import world.*;
 
 public class Main {
 
 	private static boolean IsRunning = true;
-	private static long current = System.currentTimeMillis(), elapsedInfo = 0,
+	private static long current = System.currentTimeMillis(),current2, elapsedInfo = 0,
 			elapsed = 0, previous = 0;
 	private static long timeTicks = 0, timeFps = 0;
 	private static int FPS = 0, TICKS = 0, LAST_TICKS = 60, LAST_FPS = 60;
@@ -72,6 +73,7 @@ public class Main {
 	/**
 	 * @Info Boucle principal avec Timer
 	 */
+	public static long time = 0;
 	public static void loop() {
 		while (IsRunning) {
 			previous = current;
@@ -84,13 +86,14 @@ public class Main {
 				DisplayManager.updateDisplay();
 			}
 
+			current2 = System.nanoTime();
 			if (elapsed >= 1000 / 60) {
 				Update.updateMouse();
 				Update.updateKeyboard();
 				Update.update();
 				TICKS++;
 				elapsed = 0;
-				timeTicks = System.currentTimeMillis() - current;
+				timeTicks = System.nanoTime() - current2;
 			} else {
 				DisplayManager.clearScreen();
 				DisplayManager.preRender3D();
@@ -102,23 +105,25 @@ public class Main {
 				DisplayManager.preRender2D();
 				DisplayManager.render2D();
 				FPS++;
-				timeFps = System.currentTimeMillis() - current;
+				timeFps = System.nanoTime() - current2;
 			}
 
 			if (elapsedInfo >= 1000) {
 				LAST_FPS = FPS;
 				LAST_TICKS = TICKS;
-				Display.setTitle(TITLE + " | FPS:" + LAST_FPS + " TICKS:"
-						+ LAST_TICKS + " timeFps:" + timeFps + "ms timeTicks:"
-						+ timeTicks + "ms" + " | PX:"
+				Display.setTitle(TITLE + " | FPS:" + (int)(1000000000.0f/timeFps) + " TICKS:"
+						+ (int)(1000000000.0f/timeTicks)  + " timeFps:" + timeFps + "ns timeTicks:"
+						+ timeTicks + "ns" + " | PX:"
 						+ Camera.getPosition().getX() + " PY:"
 						+ Camera.getPosition().getY() + " PZ:"
 						+ Camera.getPosition().getZ() + " | "
-						+ mainPool);
+						+ World.updateWorldTime + " " + DisplayManager.getDelta());
 				FPS = 0;
 				TICKS = 0;
 				elapsedInfo = 0;
 			}
+			
+			Display.update();
 		}
 	}
 

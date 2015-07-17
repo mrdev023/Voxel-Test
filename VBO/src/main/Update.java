@@ -105,7 +105,6 @@ public class Update {
 	 */
 	public static void update(){
 		Main.getGame().update();
-		Display.update();
 	}
 	
 }

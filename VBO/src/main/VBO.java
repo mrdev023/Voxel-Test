@@ -1,10 +1,10 @@
 package main;
-import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL13.*;
+import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 
 import java.nio.*;
+import java.util.*;
 
 import org.lwjgl.*;
 
@@ -14,6 +14,7 @@ public class VBO {
 	private int bufferSize = 0;
 	private int vboID = 0;
 	private FloatBuffer buffer;
+	private ArrayList<Float> floatlist = new ArrayList<Float>();
 	
 	public VBO(){
 		this.vboID = createVBO();
@@ -40,18 +41,8 @@ public class VBO {
 	
 	public void addDataByFloatArray(float[] a){
 		 if(a == null)return;
-		 if(buffer != null){
-			 int size = buffer.limit();
-			 float[] previousBuffer = new float[size];
-			 buffer.get(previousBuffer);
-			 buffer.clear();
-			 buffer = BufferUtils.createFloatBuffer(size + a.length);
-			 buffer.put(previousBuffer).put(a);
-			 buffer.flip();
-		 }else{
-			 buffer = BufferUtils.createFloatBuffer(a.length);
-			 buffer.put(a);
-			 buffer.flip();
+		 for(float c :a){
+			 floatlist.add(c);
 		 }
 	}
 	
@@ -62,20 +53,11 @@ public class VBO {
 	 * 			
 	 * 			
 	 */
+
 	public void addDataByFloatList(float... a){
 		if(a == null)return;
-		 if(buffer != null){
-			 int size = buffer.limit();
-			 float[] previousBuffer = new float[size];
-			 buffer.get(previousBuffer);
-			 buffer.clear();
-			 buffer = BufferUtils.createFloatBuffer(size + a.length);
-			 buffer.put(previousBuffer).put(a);
-			 buffer.flip();
-		 }else{
-			 buffer = BufferUtils.createFloatBuffer(a.length);
-			 buffer.put(a);
-			 buffer.flip();
+		 for(float c :a){
+			 floatlist.add(c);
 		 }
 	}
 	
@@ -85,6 +67,11 @@ public class VBO {
 	 * @Info Stocke le FloatBuffer dans le GPU
 	 */
 	public void bufferData(){
+		buffer = BufferUtils.createFloatBuffer(floatlist.size());
+		for(Float f : floatlist){
+			buffer.put(f);
+		}
+		buffer.flip();
 		glBindBuffer(GL_ARRAY_BUFFER, vboID);
 		glBufferData(GL_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
 //		glBufferSubData(vboID, 0, buffer);
