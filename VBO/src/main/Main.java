@@ -1,5 +1,7 @@
 package main;
 
+import rendering.*;
+
 import java.util.concurrent.*;
 
 import org.lwjgl.input.*;
@@ -21,26 +23,38 @@ public class Main {
 	private static final int width = 1280, height = 720;
 	
 
-	private static AffinityLock al;
+//	private static AffinityLock al;
+	public static ExecutorService mainPool;
 	
 	private static Game game;
+	private static SkyBox skybox;
 
 	/**
 	 * @param args
 	 * @Info Fonction principal
 	 */
 	public static void main(String[] args) {
-//		mainPool = new ForkJoinPool(Runtime.getRuntime().availableProcessors());
+//		mainPool = ForkJoinPool.commonPool();
+		mainPool = Executors.newWorkStealingPool();
 //		AffinityLock.cpuLayout(new NoCpuLayout(Runtime.getRuntime().availableProcessors() + 8));
-		al = AffinityLock.acquireLock();
-		System.out.println(AffinityLock.cpuLayout().coresPerSocket());
+//		al = AffinityLock.acquireLock();
+//		System.out.println(AffinityLock.cpuLayout().coresPerSocket())
 		try {
 			Display.setTitle(TITLE);
 			Display.setDisplayMode(new DisplayMode(width, height));
 			Display.setResizable(true);
-			Mouse.setGrabbed(true);
 			Display.create();
+			String back = "/tex/cubemap/back.jpg";
+			String bottom = "/tex/cubemap/bottom.jpg";
+			String front = "/tex/cubemap/front.jpg";
+			String top = "/tex/cubemap/top.jpg";
+			String left = "/tex/cubemap/left.jpg";
+			String right = "/tex/cubemap/right.jpg";
+			
+			skybox = new SkyBox(new String[] { right, left, top, bottom, back,
+					front });
 			game = new Game();
+			Mouse.setGrabbed(true);
 			loop();
 		} catch (Exception e) {
 
@@ -48,8 +62,9 @@ public class Main {
 	}
 	
 	public static Runnable addThread(Runnable t,String name){
+		mainPool.submit(t);
 //		mainPool.execute(t);
-		new Thread(t, name).start();
+//		new Thread(t, name).start();
 //		System.out.println("Details" + AffinityLock.dumpLocks());
 		return t;
 	}
@@ -78,8 +93,11 @@ public class Main {
 				timeTicks = System.currentTimeMillis() - current;
 			} else {
 				DisplayManager.clearScreen();
-				Shader.MAIN.bind();
 				DisplayManager.preRender3D();
+				Camera.renderCamera();
+				Shader.SKYBOX.bind();
+				skybox.render(Camera.getPosition());
+				Shader.MAIN.bind();
 				DisplayManager.render3D();
 				DisplayManager.preRender2D();
 				DisplayManager.render2D();
@@ -95,7 +113,8 @@ public class Main {
 						+ timeTicks + "ms" + " | PX:"
 						+ Camera.getPosition().getX() + " PY:"
 						+ Camera.getPosition().getY() + " PZ:"
-						+ Camera.getPosition().getZ());
+						+ Camera.getPosition().getZ() + " | "
+						+ mainPool);
 				FPS = 0;
 				TICKS = 0;
 				elapsedInfo = 0;

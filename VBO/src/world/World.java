@@ -11,7 +11,7 @@ public class World {
 	public long seed;
 	public final int SIZE = 1,HEIGHT = 1;
 	public static final float GRAVITY = 1;
-	public static final int VIEW_CHUNK = 2;
+	public static final int VIEW_CHUNK = 8;
 	public static WorldNoise worldNoise;
 	
 	public ArrayList<Chunk> chunks = new ArrayList<Chunk>();
@@ -95,6 +95,21 @@ public class World {
 			}
 		}
 		return c;
+	}
+	
+	public void addBlock(int x,int y,int z,Block b){
+		int xc = (x / Chunk.SIZE);
+		int zc = (z / Chunk.SIZE);
+		int yc = (y / Chunk.SIZE);
+
+		Chunk chunk = getChunk(xc, yc, zc);
+		if(chunk == null)return;
+		
+		int xb = x % Chunk.SIZE;
+		int yb = y % Chunk.SIZE;
+		int zb = z % Chunk.SIZE;
+		
+		chunk.addBlock(xb, yb, zb, b);
 	}
 
 	public Block getBlock(int x, int y, int z) {

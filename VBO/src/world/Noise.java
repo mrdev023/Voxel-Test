@@ -20,10 +20,23 @@ public class Noise {
 	}
 	
 	public float getNoise(float x,float z){
-		int xmin = (int)(double)x/octave;
-		int xmax = (int) xmin + 1;
-		int zmin = (int)(double)z/octave;
-		int zmax = (int) zmin + 1;
+		int xmin = 0,xmax = 0,zmin = 0,zmax = 0;
+		if(x<0){
+			xmin = (int)(double)x/octave;
+			xmax = (int) xmin - 1;			
+		}else{
+			xmin = (int)(double)x/octave;
+			xmax = (int) xmin + 1;			
+		}
+		
+		if(z<0){
+			zmin = (int)(double)z/octave;
+			zmax = (int) zmin - 1;
+		}else{
+			zmin = (int)(double)z/octave;
+			zmax = (int) zmin + 1;
+		}
+
 		
 		Vector2f a = new Vector2f(xmin,zmin);
 		Vector2f b = new Vector2f(xmax,zmin);

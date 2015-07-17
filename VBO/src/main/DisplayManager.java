@@ -38,7 +38,6 @@ public class DisplayManager {
 	 * @Info Fait le rendu 3d
 	 */
 	public static void render3D(){
-		Camera.renderCamera();
 		Main.getGame().render();
 	}
 	
