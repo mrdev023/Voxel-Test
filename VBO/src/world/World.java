@@ -111,28 +111,52 @@ public class World {
 		
 		chunk.addBlock(xb, yb, zb, b);
 	}
-
-	public Block getBlock(int x, int y, int z) {
+	
+	public Vector3f getLocalChunk(int x, int y, int z,boolean nx,boolean ny,boolean nz){
 		int xc = (x / Chunk.SIZE);
 		int zc = (z / Chunk.SIZE);
 		int yc = (y / Chunk.SIZE);
 
+		if(nx)xc -= 1;
+		if(ny)yc -= 1;
+		if(nz)zc -= 1;
+		return new Vector3f(xc,yc,zc);
+	}
+
+	public Block getBlock(int x, int y, int z,boolean nx,boolean ny,boolean nz) {
+		int xc = (x / Chunk.SIZE);
+		int zc = (z / Chunk.SIZE);
+		int yc = (y / Chunk.SIZE);
+
+		if(nx)xc -= 1;
+		if(ny)yc -= 1;
+		if(nz)zc -= 1;
+		
 		Chunk chunk = getChunk(xc, yc, zc);
 		if(chunk == null)return null;
+		int xb = 0;
+		int yb = 0;
+		int zb = 0;
 		
-		int xb = x % Chunk.SIZE;
-		int yb = y % Chunk.SIZE;
-		int zb = z % Chunk.SIZE;
+		if( x <= 0 && nx){
+			xb = (Chunk.SIZE-1)-((-x) % Chunk.SIZE) + 1;
+		}else{
+			xb = x % Chunk.SIZE;			
+		}
 		
-//		if(xb < 0){
-//			xb = -xb;
-//		}
-//		if(yb < 0){
-//			yb = -yb;
-//		}
-//		if(zb < 0){
-//			zb = -zb;
-//		}
+		
+		if( y <= 0 && ny){
+			yb = (Chunk.SIZE-1)-((-y) % Chunk.SIZE) + 1;
+		}else{
+			yb = y % Chunk.SIZE;			
+		}
+		
+		
+		if( z <= 0 && nz){
+			zb = (Chunk.SIZE-1)-((-z) % Chunk.SIZE) + 1;
+		}else{
+			zb = z % Chunk.SIZE;			
+		}
 
 		return chunk.getBlock(xb, yb, zb);
 	}

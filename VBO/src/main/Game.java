@@ -26,5 +26,22 @@ public class Game {
 	public void renderGUI(){
 		
 	}
+
+	public World getWorld() {
+		return world;
+	}
+
+	public void setWorld(World world) {
+		this.world = world;
+	}
+
+	public int getUpdate() {
+		return update;
+	}
+
+	public void setUpdate(int update) {
+		this.update = update;
+	}
+	
 	
 }

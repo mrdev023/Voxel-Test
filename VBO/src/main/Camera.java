@@ -9,13 +9,18 @@ public class Camera {
 	
 	private static Vector3f position = new Vector3f(0,4,0);
 	private static Vector2f rotation = new Vector2f(0,120);
+	private static PlayerRayCast playerRaycast;
 	private static final float HEIGHT = (float) (1.5f - (Block.getSize()/2.0f));
+	
+	public static void initCamera(){
+		playerRaycast = new PlayerRayCast();
+	}
 	
 	public static void renderCamera(){
 		glLoadIdentity();
 		glRotatef(rotation.getX(), 1, 0, 0);
 		glRotatef(rotation.getY(), 0, 1, 0);
-		glTranslatef(-position.getX(), -(position.getY()+HEIGHT), -position.getZ());
+		glTranslatef(-position.getX(), -(position.getY()+getHeight()), -position.getZ());
 	}
 
 	public static void move(float xa,float ya,float za){
@@ -52,6 +57,23 @@ public class Camera {
 		}
 	}
 	
+	public static Vector3f getDirection(){
+		Vector3f r = new Vector3f();
+		
+		float cosY = (float)Math.cos(Math.toRadians(rotation.getY() - 90));
+		float sinY = (float)Math.sin(Math.toRadians(rotation.getY() - 90));
+		float cosP = (float)Math.cos(Math.toRadians(-rotation.getX()));
+		float sinP = (float)Math.sin(Math.toRadians(-rotation.getX()));
+		
+		r.setX(cosY * cosP);
+		r.setY(sinP);
+		r.setZ(sinY * cosP);
+		
+		r.normalize();
+		
+		return r;
+	}
+	
 	public static Vector3f getPosition() {
 		return position;
 	}
@@ -67,5 +89,19 @@ public class Camera {
 	public static void setRotation(Vector2f rotation) {
 		Camera.rotation = rotation;
 	}
+
+	public static float getHeight() {
+		return HEIGHT;
+	}
+
+	public static PlayerRayCast getPlayerRaycast() {
+		return playerRaycast;
+	}
+
+	public static void setPlayerRaycast(PlayerRayCast playerRaycast) {
+		Camera.playerRaycast = playerRaycast;
+	}
+	
+	
 	
 }

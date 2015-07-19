@@ -1,6 +1,10 @@
 package main;
+import math.*;
+
 import org.lwjgl.input.*;
 import org.lwjgl.opengl.*;
+
+import blocks.*;
 
 
 public class Update {
@@ -8,7 +12,8 @@ public class Update {
 	private static float xDir,yDir,zDir;
 	private static float speed = 0.01f;
 	private static float xa = 0,ya = 0,za = 0;
-	
+	private static Block selectedBlock = null;
+	private static Vector3f selectedVector = new Vector3f(0,0,0);
 	
 	/**
 	 * @Info Fonction permettant de gerer les action de la souris
@@ -105,6 +110,92 @@ public class Update {
 	 */
 	public static void update(){
 		Main.getGame().update();
+		Camera.getPlayerRaycast().update();
+		if(Camera.getPlayerRaycast().getBlock(Main.getGame().getWorld()) != null){
+			boolean nx = false, ny = false, nz = false;
+			if(Camera.getPlayerRaycast().getBlock(Main.getGame().getWorld()).x < 0)nx = true;
+			if(Camera.getPlayerRaycast().getBlock(Main.getGame().getWorld()).y < 0)ny = true;
+			if(Camera.getPlayerRaycast().getBlock(Main.getGame().getWorld()).z < 0)nz = true;
+			selectedBlock = Main.getGame().getWorld().getBlock((int)Camera.getPlayerRaycast().getBlock(Main.getGame().getWorld()).getX(), (int)Camera.getPlayerRaycast().getBlock(Main.getGame().getWorld()).getY(), (int)Camera.getPlayerRaycast().getBlock(Main.getGame().getWorld()).getZ(),nx,ny,nz);
+			selectedVector = new Vector3f(Camera.getPlayerRaycast().getBlock(Main.getGame().getWorld()).getX(), Camera.getPlayerRaycast().getBlock(Main.getGame().getWorld()).getY(), Camera.getPlayerRaycast().getBlock(Main.getGame().getWorld()).getZ());
+		}else{
+			selectedBlock = null;
+			selectedVector = null;
+		}
 	}
+
+	public static float getxDir() {
+		return xDir;
+	}
+
+	public static void setxDir(float xDir) {
+		Update.xDir = xDir;
+	}
+
+	public static float getyDir() {
+		return yDir;
+	}
+
+	public static void setyDir(float yDir) {
+		Update.yDir = yDir;
+	}
+
+	public static float getzDir() {
+		return zDir;
+	}
+
+	public static void setzDir(float zDir) {
+		Update.zDir = zDir;
+	}
+
+	public static float getSpeed() {
+		return speed;
+	}
+
+	public static void setSpeed(float speed) {
+		Update.speed = speed;
+	}
+
+	public static float getXa() {
+		return xa;
+	}
+
+	public static void setXa(float xa) {
+		Update.xa = xa;
+	}
+
+	public static float getYa() {
+		return ya;
+	}
+
+	public static void setYa(float ya) {
+		Update.ya = ya;
+	}
+
+	public static float getZa() {
+		return za;
+	}
+
+	public static void setZa(float za) {
+		Update.za = za;
+	}
+
+	public static Block getSelectedBlock() {
+		return selectedBlock;
+	}
+
+	public static void setSelectedBlock(Block selectedBlock) {
+		Update.selectedBlock = selectedBlock;
+	}
+
+	public static Vector3f getSelectedVector() {
+		return selectedVector;
+	}
+
+	public static void setSelectedVector(Vector3f selectedVector) {
+		Update.selectedVector = selectedVector;
+	}
+	
+	
 	
 }

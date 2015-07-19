@@ -39,6 +39,9 @@ public class DisplayManager {
 	 */
 	public static void render3D(){
 		Main.getGame().render();
+		if(Update.getSelectedBlock() != null && Update.getSelectedVector() !=null){
+			renderBlock((int)Update.getSelectedVector().x,(int)Update.getSelectedVector().y,(int)Update.getSelectedVector().z);
+		}
 	}
 	
 	/**
@@ -83,5 +86,43 @@ public class DisplayManager {
 		DisplayManager.fov = fov;
 	}
 	
-	
+	private static void renderBlock(int x,int y ,int z){
+		float s = 1;
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glDisable(GL_CULL_FACE);
+		glLineWidth(2);
+		glBegin(GL_QUADS);
+			glVertex3f(x,y,z);
+			glVertex3f(x + s,y,z);
+			glVertex3f(x + s, y + s, z);
+			glVertex3f(x,y + s,z);
+			
+			glVertex3f(x + s,y,z + s);
+			glVertex3f(x,y,z + s);
+			glVertex3f(x,y + s,z + s);
+			glVertex3f(x + s, y + s, z + s);
+
+			glVertex3f(x + s,y,z);
+			glVertex3f(x,y,z);
+			glVertex3f(x,y,z + s);
+			glVertex3f(x + s,y,z + s);
+			
+			glVertex3f(x,y + s,z);
+			glVertex3f(x + s,y + s,z);
+			glVertex3f(x + s,y + s,z + s);
+			glVertex3f(x,y + s,z + s);
+			
+			glVertex3f(x,y,z);
+			glVertex3f(x,y + s,z);
+			glVertex3f(x,y + s,z + s);
+			glVertex3f(x,y,z + s);
+			
+			glVertex3f(x + s,y + s,z);
+			glVertex3f(x + s,y,z);
+			glVertex3f(x + s,y,z + s);
+			glVertex3f(x + s,y + s,z + s);
+		glEnd();
+		glEnable(GL_CULL_FACE);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
 }

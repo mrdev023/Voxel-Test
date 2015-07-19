@@ -54,6 +54,7 @@ public class Main {
 			
 			skybox = new SkyBox(new String[] { right, left, top, bottom, back,
 					front });
+			Camera.initCamera();
 			game = new Game();
 			Mouse.setGrabbed(true);
 			loop();
@@ -111,13 +112,20 @@ public class Main {
 			if (elapsedInfo >= 1000) {
 				LAST_FPS = FPS;
 				LAST_TICKS = TICKS;
+				boolean nx = false, ny = false, nz = false;
+				if(Camera.getPosition().getX() < 0)nx = true;
+				if(Camera.getPosition().getY() < 0)ny = true;
+				if(Camera.getPosition().getZ() < 0)nz = true;
 				Display.setTitle(TITLE + " | FPS:" + (int)(1000000000.0f/timeFps) + " TICKS:"
-						+ (int)(1000000000.0f/timeTicks)  + " timeFps:" + timeFps + "ns timeTicks:"
+						+ LAST_TICKS  + " timeFps:" + timeFps + "ns timeTicks:"
 						+ timeTicks + "ns" + " | PX:"
 						+ Camera.getPosition().getX() + " PY:"
 						+ Camera.getPosition().getY() + " PZ:"
 						+ Camera.getPosition().getZ() + " | "
-						+ World.updateWorldTime + " " + DisplayManager.getDelta());
+						+ World.updateWorldTime + " " + DisplayManager.getDelta()
+						+ " " + Update.getSelectedBlock() + " | "
+						+ getGame().getWorld().getBlock((int)Camera.getPosition().getX(), (int) Camera.getPosition().getY(), (int) Camera.getPosition().getZ(),nx,ny,nz) + " | "
+						+ getGame().getWorld().getLocalChunk((int)Camera.getPosition().getX(), (int) Camera.getPosition().getY(), (int) Camera.getPosition().getZ(),nx,ny,nz).toString());
 				FPS = 0;
 				TICKS = 0;
 				elapsedInfo = 0;
@@ -127,6 +135,12 @@ public class Main {
 		}
 	}
 
+	public static String getStringByNoString(Object... a){
+		String b = "";
+		for(Object c : a)b+= c + " ";
+		return b;
+	}
+	
 	public static boolean isRunning() {
 		return IsRunning;
 	}
