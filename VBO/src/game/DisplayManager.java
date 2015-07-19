@@ -1,6 +1,7 @@
-package main;
+package game;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.*;
+import main.*;
 
 import org.lwjgl.input.*;
 import org.lwjgl.opengl.*;
@@ -17,6 +18,7 @@ public class DisplayManager {
 	 */
 	public static void clearScreen(){
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClearColor(0.19f, 0.79f, 0.82f, 1);
 	}
 	
 	/**
@@ -43,7 +45,7 @@ public class DisplayManager {
 			renderBlock((int)Update.getSelectedVector().x,(int)Update.getSelectedVector().y,(int)Update.getSelectedVector().z);
 		}
 	}
-	
+
 	/**
 	 * @Info Definie le mode d'affichage pour le rendu en 2d
 	 */

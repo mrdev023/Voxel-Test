@@ -1,4 +1,5 @@
-package main;
+package game;
+import main.*;
 import math.*;
 
 import org.lwjgl.input.*;
@@ -10,7 +11,7 @@ import blocks.*;
 public class Update {
 	
 	private static float xDir,yDir,zDir;
-	private static float speed = 0.01f;
+	private static float speed = 0.02f;
 	private static float xa = 0,ya = 0,za = 0;
 	private static Block selectedBlock = null;
 	private static Vector3f selectedVector = new Vector3f(0,0,0);
@@ -19,15 +20,17 @@ public class Update {
 	 * @Info Fonction permettant de gerer les action de la souris
 	 */
 	public static void updateMouse(){
-		
-		Camera.getRotation().x -= Mouse.getDY() * 0.5;
-		Camera.getRotation().y += Mouse.getDX() * 0.5;
-		
-		while(Mouse.next()){
-			if(Mouse.getEventButtonState()){
-				
-			}else{
-				
+		if(Mouse.isGrabbed()){
+			
+			Camera.getRotation().x -= Mouse.getDY() * 0.5;
+			Camera.getRotation().y += Mouse.getDX() * 0.5;
+			
+			while(Mouse.next()){
+				if(Mouse.getEventButtonState()){
+					
+				}else{
+					
+				}
 			}
 		}
 	}
@@ -47,47 +50,53 @@ public class Update {
 				if(Keyboard.getEventKey() == Keyboard.KEY_F2){
 					Mouse.setGrabbed(!Mouse.isGrabbed());
 				}
+				if(Keyboard.getEventKey() == Keyboard.KEY_F5){
+					Camera.setPosition(new Vector3f(0,2,0));
+				}
+				if(Keyboard.getEventKey() == Keyboard.KEY_X){
+					Camera.noClip = !Camera.noClip;
+				}
 			}else{
 				
 			}
 			
 		}
 		
-		if(Camera.getRotation().x < -90) Camera.getRotation().x = -90;
-		if(Camera.getRotation().x > 90) Camera.getRotation().x = 90;
-		
-		
-		if(Keyboard.isKeyDown(Keyboard.KEY_Z)){
-			zDir = -speed;
-		}
-		
-		if(Keyboard.isKeyDown(Keyboard.KEY_S)){
-			zDir = speed;
-		}
-		
-		if(Keyboard.isKeyDown(Keyboard.KEY_Q)){
-			xDir = -speed;
-		}
-		
-		if(Keyboard.isKeyDown(Keyboard.KEY_D)){
-			xDir = speed;
-		}
-		
-		if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)){
-//			if(grounded)yDir = 0.3f;
-//			if(!gravity)yDir = speed;
-			yDir = speed;
-		}
-		
-		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
-			speed = 0.05f;
-		}else{
-			speed = 0.01f;
-		}
-		
-		if(Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)){
-//			if(!gravity)yDir = -speed;
-			yDir = -speed;
+		if(Mouse.isGrabbed()){			
+			if(Camera.getRotation().x < -90) Camera.getRotation().x = -90;
+			if(Camera.getRotation().x > 90) Camera.getRotation().x = 90;
+			
+			
+			if(Keyboard.isKeyDown(Keyboard.KEY_Z)){
+				zDir = -speed;
+			}
+			
+			if(Keyboard.isKeyDown(Keyboard.KEY_S)){
+				zDir = speed;
+			}
+			
+			if(Keyboard.isKeyDown(Keyboard.KEY_Q)){
+				xDir = -speed;
+			}
+			
+			if(Keyboard.isKeyDown(Keyboard.KEY_D)){
+				xDir = speed;
+			}
+			
+			if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)){
+				if(Camera.grounded)yDir = 0.3f;
+				if(!Camera.gravity)yDir = speed;
+			}
+			
+			if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
+				speed = 0.01f;
+			}else{
+				speed = 0.02f;
+			}
+			
+			if(Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)){
+				if(!Camera.gravity)yDir = -speed;
+			}
 		}
 		
 		xa += xDir * Math.cos(Math.toRadians(Camera.getRotation().y)) - zDir * Math.sin(Math.toRadians(Camera.getRotation().y));

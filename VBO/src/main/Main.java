@@ -1,6 +1,7 @@
 package main;
 
 import rendering.*;
+import game.*;
 
 import java.util.concurrent.*;
 
@@ -28,7 +29,6 @@ public class Main {
 	public static ExecutorService mainPool;
 	
 	private static Game game;
-	private static SkyBox skybox;
 
 	/**
 	 * @param args
@@ -45,15 +45,6 @@ public class Main {
 			Display.setDisplayMode(new DisplayMode(width, height));
 			Display.setResizable(true);
 			Display.create();
-			String back = "/tex/cubemap/back.jpg";
-			String bottom = "/tex/cubemap/bottom.jpg";
-			String front = "/tex/cubemap/front.jpg";
-			String top = "/tex/cubemap/top.jpg";
-			String left = "/tex/cubemap/left.jpg";
-			String right = "/tex/cubemap/right.jpg";
-			
-			skybox = new SkyBox(new String[] { right, left, top, bottom, back,
-					front });
 			Camera.initCamera();
 			game = new Game();
 			Mouse.setGrabbed(true);
@@ -99,9 +90,6 @@ public class Main {
 				DisplayManager.clearScreen();
 				DisplayManager.preRender3D();
 				Camera.renderCamera();
-				Shader.SKYBOX.bind();
-				skybox.render(Camera.getPosition());
-				Shader.MAIN.bind();
 				DisplayManager.render3D();
 				DisplayManager.preRender2D();
 				DisplayManager.render2D();
@@ -124,8 +112,7 @@ public class Main {
 						+ Camera.getPosition().getZ() + " | "
 						+ World.updateWorldTime + " " + DisplayManager.getDelta()
 						+ " " + Update.getSelectedBlock() + " | "
-						+ getGame().getWorld().getBlock((int)Camera.getPosition().getX(), (int) Camera.getPosition().getY(), (int) Camera.getPosition().getZ(),nx,ny,nz) + " | "
-						+ getGame().getWorld().getLocalChunk((int)Camera.getPosition().getX(), (int) Camera.getPosition().getY(), (int) Camera.getPosition().getZ(),nx,ny,nz).toString());
+						+ Runtime.getRuntime().totalMemory()/1024);
 				FPS = 0;
 				TICKS = 0;
 				elapsedInfo = 0;

@@ -1,4 +1,4 @@
-package main;
+package game;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
@@ -85,16 +85,19 @@ public class VBO {
 	public void renderVBO(){
 		glBindBuffer(GL_ARRAY_BUFFER, vboID);
 		
-		glEnableVertexAttribArray(0);
-		glEnableVertexAttribArray(1);
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_COLOR_ARRAY);
 		
-		glVertexAttribPointer(0,3,GL_FLOAT,false,7 * 4,0);
-		glVertexAttribPointer(1,4,GL_FLOAT,false,7 * 4,12);
+		glVertexPointer(3, GL_FLOAT, 7 * 4, 0);
+		glColorPointer(4, GL_FLOAT, 7 * 4, 12);
+		
+//		glVertexAttribPointer(0,3,GL_FLOAT,false,7 * 4,0);
+//		glVertexAttribPointer(1,4,GL_FLOAT,false,7 * 4,12);
 		
 		glDrawArrays(GL_QUADS, 0, bufferSize);
 		
-		glDisableVertexAttribArray(0);
-		glDisableVertexAttribArray(1);
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_COLOR_ARRAY);
 		
 	}
 	

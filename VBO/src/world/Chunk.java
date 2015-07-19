@@ -1,5 +1,7 @@
 package world;
 
+import game.*;
+
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -11,7 +13,7 @@ import math.*;
 
 public class Chunk {
 
-	public final static int SIZE = 16;
+	public final static int SIZE = 64;
 	private int x, y, z;
 	private VBO vbo;
 	private World world;
@@ -334,8 +336,9 @@ class Generate implements Runnable {
 		long current = System.currentTimeMillis();
 		long elapsed1 = 0;
 		boolean IsError = true;
-		Noise noise = new Noise(world.seed, 30, 7);
+		Noise noise = new Noise(world.seed, 50, 16);
 		Random random = new Random(world.seed);
+		Noise colorVariationNoise = new Noise(world.seed,50,2);
 		for (int x = 0; x < chunk.SIZE; x++) {
 			for (int z = 0; z < chunk.SIZE; z++) {
 					int xa = (int)((Camera.getPosition().getX()-((float)Chunk.SIZE/2.0f))/(float)Chunk.SIZE) - World.VIEW_CHUNK;
@@ -350,7 +353,14 @@ class Generate implements Runnable {
 					int xx = chunk.getX() * chunk.SIZE + x;
 					int zz = chunk.getZ() * chunk.SIZE + z;
 
-					chunk.blocks[x][(int)noise.getNoise(xx, zz)][z] = Block.GRASS;
+					
+					Color4f green = new Color4f(0.2f,0.6f,0);
+					Color4f yellow = new Color4f(0.36f,0.77f,0.17f);
+					float v = colorVariationNoise.getNoise(xx, zz);
+					
+					Color4f finalColor = Color4f.interpolate(yellow, green, v);
+					
+					chunk.blocks[x][(int)noise.getNoise(xx, zz)][z] = new GrassBlock().setColor(finalColor);
 
 			}
 		}

@@ -1,5 +1,8 @@
 package world;
 
+import static org.lwjgl.opengl.GL11.*;
+import game.*;
+
 import java.util.*;
 
 import main.*;
@@ -11,7 +14,7 @@ public class World {
 	public long seed;
 	public final int SIZE = 1,HEIGHT = 1;
 	public static final float GRAVITY = 1;
-	public static final int VIEW_CHUNK = 4;
+	public static final int VIEW_CHUNK = 2;
 	public static WorldNoise worldNoise;
 	
 	public ArrayList<Chunk> chunks = new ArrayList<Chunk>();
@@ -38,7 +41,6 @@ public class World {
 		int za = (int)((Camera.getPosition().getZ()-((float)Chunk.SIZE/2.0f))/(float)Chunk.SIZE) - VIEW_CHUNK;
 		int zb = (int)((Camera.getPosition().getZ()-((float)Chunk.SIZE/2.0f))/(float)Chunk.SIZE) + VIEW_CHUNK;
 		
-				
 		int delta_x = xb - xa;
 		int delta_z = zb - za;
 		for(int i = 0; i <= delta_x;i++){
@@ -71,9 +73,19 @@ public class World {
 	
 	public void render(){
 		for(Chunk c : chunks){
-			if(c.isLoaded())
-			c.render();
+			if(c.isLoaded()){
+				c.render();
+			}
 		}
+	}
+	
+	public void renderPoints(Vector2f... a){
+		glPointSize(10);
+		glBegin(GL_POINTS);
+		for(Vector2f b : a){
+			glVertex3f(b.getX(),Camera.getPosition().getY() + Camera.getHeight(),b.getY());
+		}
+		glEnd();
 	}
 	
 	public void removeByChunk(Chunk ch){
