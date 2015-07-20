@@ -1,6 +1,5 @@
 package main;
 
-import rendering.*;
 import game.*;
 
 import java.util.concurrent.*;
@@ -8,9 +7,6 @@ import java.util.concurrent.*;
 import org.lwjgl.input.*;
 import org.lwjgl.opengl.*;
 
-import rendering.*;
-import vanilla.java.affinity.*;
-import vanilla.java.affinity.impl.*;
 import world.*;
 
 public class Main {
@@ -100,10 +96,6 @@ public class Main {
 			if (elapsedInfo >= 1000) {
 				LAST_FPS = FPS;
 				LAST_TICKS = TICKS;
-				boolean nx = false, ny = false, nz = false;
-				if(Camera.getPosition().getX() < 0)nx = true;
-				if(Camera.getPosition().getY() < 0)ny = true;
-				if(Camera.getPosition().getZ() < 0)nz = true;
 				Display.setTitle(TITLE + " | FPS:" + (int)(1000000000.0f/timeFps) + " TICKS:"
 						+ LAST_TICKS  + " timeFps:" + timeFps + "ns timeTicks:"
 						+ timeTicks + "ns" + " | PX:"

@@ -22,14 +22,12 @@ public class Chunk {
 	private boolean IsGenerated = false;
 	private boolean IsCurrentGenerate = false;
 	private boolean IsDestroy = false;
-	private WorldNoise worldNoise;
 
-	public Chunk(int x, int y, int z, World world,WorldNoise worldNoise) {
+	public Chunk(int x, int y, int z, World world) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 		this.world = world;
-		this.worldNoise = worldNoise;
 		this.blocks = new Block[SIZE][SIZE][SIZE];
 		vbo = new VBO();
 	}
@@ -297,14 +295,6 @@ public class Chunk {
 	public boolean isDestroy() {
 		return IsDestroy;
 	}
-
-	public WorldNoise getWorldNoise() {
-		return worldNoise;
-	}
-
-	public void setWorldNoise(WorldNoise worldNoise) {
-		this.worldNoise = worldNoise;
-	}
 	
 	
 }
@@ -336,9 +326,9 @@ class Generate implements Runnable {
 		long current = System.currentTimeMillis();
 		long elapsed1 = 0;
 		boolean IsError = true;
-		Noise noise = new Noise(world.seed, 50, 16);
+		Noise noise = new Noise(world.seed, world.octave, world.amplitude);;
 		Random random = new Random(world.seed);
-		Noise colorVariationNoise = new Noise(world.seed,50,2);
+		Noise colorVariationNoise = new Noise(world.seed,world.octave,2);
 		for (int x = 0; x < chunk.SIZE; x++) {
 			for (int z = 0; z < chunk.SIZE; z++) {
 					int xa = (int)((Camera.getPosition().getX()-((float)Chunk.SIZE/2.0f))/(float)Chunk.SIZE) - World.VIEW_CHUNK;

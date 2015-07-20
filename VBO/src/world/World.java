@@ -5,27 +5,27 @@ import game.*;
 
 import java.util.*;
 
-import main.*;
 import math.*;
 import blocks.*;
 
 public class World {
 
 	public long seed;
+	public int octave,amplitude;
 	public final int SIZE = 1,HEIGHT = 1;
 	public static final float GRAVITY = 1;
 	public static final int VIEW_CHUNK = 2;
-	public static WorldNoise worldNoise;
 	
 	public ArrayList<Chunk> chunks = new ArrayList<Chunk>();
 	
-	public World(long seed){
+	public World(long seed,int octave,int amplitude){
 		this.seed= seed;
-		this.worldNoise = new WorldNoise(seed);
+		this.octave = octave;
+		this.amplitude = amplitude;
 		for(int x = 0;x < SIZE;x++){
 			for(int y = 0;y < HEIGHT;y++){
 				for(int z = 0;z < SIZE;z++){
-					Chunk ch = new Chunk(x,y,z,this,worldNoise);
+					Chunk ch = new Chunk(x,y,z,this);
 					chunks.add(ch);
 				}
 			}
@@ -47,7 +47,7 @@ public class World {
 			for(int k = 0;k <= delta_z;k++){
 //				for(int j = 0; j < HEIGHT; j++){
 					if(getChunk((xa + i), 0, (za + k)) != null)continue;
-					Chunk ch = new Chunk((xa + i),0,(za + k),this,worldNoise);
+					Chunk ch = new Chunk((xa + i),0,(za + k),this);
 					chunks.add(ch);
 //				}
 			}
@@ -171,6 +171,46 @@ public class World {
 		}
 
 		return chunk.getBlock(xb, yb, zb);
+	}
+
+	public long getSeed() {
+		return seed;
+	}
+
+	public void setSeed(long seed) {
+		this.seed = seed;
+	}
+
+	public ArrayList<Chunk> getChunks() {
+		return chunks;
+	}
+
+	public void setChunks(ArrayList<Chunk> chunks) {
+		this.chunks = chunks;
+	}
+
+	public static long getUpdateWorldTime() {
+		return updateWorldTime;
+	}
+
+	public static void setUpdateWorldTime(long updateWorldTime) {
+		World.updateWorldTime = updateWorldTime;
+	}
+
+	public int getSIZE() {
+		return SIZE;
+	}
+
+	public int getHEIGHT() {
+		return HEIGHT;
+	}
+
+	public static float getGravity() {
+		return GRAVITY;
+	}
+
+	public static int getViewChunk() {
+		return VIEW_CHUNK;
 	}
 	
 	

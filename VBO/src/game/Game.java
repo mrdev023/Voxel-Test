@@ -8,7 +8,7 @@ public class Game {
 	private int update = 0;
 	
 	public Game(){
-		world= new World(0);
+		world= new World(0,120,50);
 	}
 	
 	public void update(){
