@@ -6,6 +6,7 @@ import org.lwjgl.input.*;
 import org.lwjgl.opengl.*;
 
 import mrdev023.game.*;
+import mrdev023.game.gamestate.*;
 import mrdev023.main.*;
 import mrdev023.rendering.*;
 import mrdev023.update.*;
@@ -22,7 +23,7 @@ public class GameEngine {
 	private static final String TITLE = "Test VBO";
 	private static final int width = 1280, height = 720;
 	
-	private static Game game;
+	public static GameState gameState;
 	
 	public static void initWindow(){
 		Main.mainPool = Executors.newWorkStealingPool();
@@ -32,8 +33,8 @@ public class GameEngine {
 			Display.setResizable(true);
 			Display.create();
 			Camera.initCamera();
-			game = new SoloGame();
 			Mouse.setGrabbed(true);
+			gameState = GameState.MAIN_MENU;
 			loop();
 		} catch (Exception e) {
 
@@ -67,7 +68,6 @@ public class GameEngine {
 			} else {
 				DisplayManager.clearScreen();
 				DisplayManager.preRender3D();
-				Camera.renderCamera();
 				DisplayManager.render3D();
 				DisplayManager.preRender2D();
 				DisplayManager.render2D();
@@ -85,7 +85,7 @@ public class GameEngine {
 						+ Camera.getPosition().getY() + " PZ:"
 						+ Camera.getPosition().getZ() + " | "
 						+ World.updateWorldTime + " " + DisplayManager.getDelta()
-						+ " " + Update.getSelectedBlock() + " | "
+						+ " | "
 						+ Runtime.getRuntime().totalMemory()/1024);
 				FPS = 0;
 				TICKS = 0;
@@ -97,8 +97,13 @@ public class GameEngine {
 		destroy();
 	}
 	
+	public static void changeGameState(GameState newGameState){
+		gameState.destroyGameState();
+		gameState = newGameState;		
+	}
+	
 	public static void destroy(){
-		game.destroyGame();
+		gameState.destroyGameState();
 		Display.destroy();
 	}
 
@@ -168,8 +173,8 @@ public class GameEngine {
 		return height;
 	}
 
-	public static Game getGame() {
-		return game;
+	public static GameState getGameState() {
+		return gameState;
 	}
 
 	

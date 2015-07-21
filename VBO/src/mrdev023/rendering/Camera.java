@@ -25,14 +25,14 @@ public class Camera {
 	}
 
 	public static void renderCamera() {
-		if (position.getY() < (int)((new Noise(GameEngine.getGame().getWorld().seed, GameEngine
-				.getGame().getWorld().octave,
-				GameEngine.getGame().getWorld().amplitude).getNoise(position.getX(),
+		if (position.getY() < (int)((new Noise(GameEngine.getGameState().getWorld().seed, GameEngine
+				.getGameState().getWorld().octave,
+				GameEngine.getGameState().getWorld().amplitude).getNoise(position.getX(),
 				position.getZ())) + 1)) {
 			
-			position.setY((int)((new Noise(GameEngine.getGame().getWorld().seed, GameEngine
-					.getGame().getWorld().octave,
-					GameEngine.getGame().getWorld().amplitude).getNoise(position.getX(),
+			position.setY((int)((new Noise(GameEngine.getGameState().getWorld().seed, GameEngine
+					.getGameState().getWorld().octave,
+					GameEngine.getGameState().getWorld().amplitude).getNoise(position.getX(),
 					position.getZ())) + 2));
 		}
 		glLoadIdentity();
@@ -119,7 +119,7 @@ public class Camera {
 	}
 
 	public static boolean isColliding(float xa, float ya, float za) {
-		World world = GameEngine.getGame().getWorld();
+		World world = GameEngine.getGameState().getWorld();
 		float r = 0.3f;
 
 		boolean nx = false, ny = false, nz = false;

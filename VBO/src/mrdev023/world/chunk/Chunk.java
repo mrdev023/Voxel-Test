@@ -98,7 +98,7 @@ public class Chunk {
 	}
 
 	public void loopChunk(int x, int y, int z) {
-		world = GameEngine.getGame().getWorld();
+		if(GameEngine.getGameState().getWorld() != null)world = GameEngine.getGameState().getWorld();
 		int xx = this.x * SIZE + x;
 		int yy = this.y * SIZE + y;
 		int zz = this.z * SIZE + z;

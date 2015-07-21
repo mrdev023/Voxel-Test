@@ -3,15 +3,8 @@ package mrdev023.main;
 
 import java.util.concurrent.*;
 
-import mrdev023.game.*;
 import mrdev023.gameEngine.*;
-import mrdev023.rendering.*;
-import mrdev023.server.*;
-import mrdev023.update.*;
-import mrdev023.world.*;
-
-import org.lwjgl.input.*;
-import org.lwjgl.opengl.*;
+import mrdev023.network.*;
 
 public class Main {
 

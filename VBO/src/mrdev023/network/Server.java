@@ -1,4 +1,4 @@
-package mrdev023.server;
+package mrdev023.network;
 
 public class Server {
 
