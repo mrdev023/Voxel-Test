@@ -30,6 +30,8 @@ public class Vector2f {
 		return new Vector2f(x,y);
 	}
 	
-	
+	public String toString(){
+		return x + " " + y;
+	}
 	
 }

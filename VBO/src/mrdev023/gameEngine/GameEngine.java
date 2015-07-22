@@ -5,6 +5,7 @@ import java.util.concurrent.*;
 import org.lwjgl.input.*;
 import org.lwjgl.opengl.*;
 
+import mrdev023.audio.*;
 import mrdev023.game.*;
 import mrdev023.game.gamestate.*;
 import mrdev023.main.*;
@@ -32,6 +33,7 @@ public class GameEngine {
 			Display.setDisplayMode(new DisplayMode(width, height));
 			Display.setResizable(true);
 			Display.create();
+			AudioManager.create();
 			Camera.initCamera();
 			Mouse.setGrabbed(true);
 			gameState = GameState.MAIN_MENU;
@@ -104,6 +106,7 @@ public class GameEngine {
 	
 	public static void destroy(){
 		gameState.destroyGameState();
+		AudioManager.destroy();
 		Display.destroy();
 	}
 

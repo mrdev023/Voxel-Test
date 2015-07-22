@@ -100,6 +100,8 @@ public class Color4f {
 		this.a = a;
 	}
 	
-	
+	public java.awt.Color toAwtColor(){
+		return new java.awt.Color(r, g, g, a);
+	}
 	
 }

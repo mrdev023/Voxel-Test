@@ -4,6 +4,7 @@ import static org.lwjgl.util.glu.GLU.*;
 import mrdev023.gameEngine.*;
 import mrdev023.update.*;
 
+import org.lwjgl.input.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.util.glu.*;
 
@@ -47,10 +48,10 @@ public class DisplayManager {
 	 * @Info Definie le mode d'affichage pour le rendu en 2d
 	 */
 	public static void preRender2D(){
+		glDisable(GL_CULL_FACE);
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		GLU.gluOrtho2D(0, Display.getDisplayMode().getWidth(), Display
-				.getDisplayMode().getHeight(), 0);
+		glOrtho(0,Display.getDisplayMode().getWidth(),Display.getDisplayMode().getHeight(),0,-1,1);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 	}

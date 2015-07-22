@@ -65,6 +65,7 @@ public class SoloGame extends Game implements GameInterface{
 		float s = 1;
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glDisable(GL_CULL_FACE);
+		glColor3f(1, 1, 1);
 		glLineWidth(2);
 		glBegin(GL_QUADS);
 			glVertex3f(x,y,z);

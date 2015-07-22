@@ -38,7 +38,6 @@ public class Chunk {
 
 	public void createChunk(World world) {
 		this.world = world;
-
 		Main.addThread(new Generate(this, world),"Create Chunk");
 		IsCurrentGenerate = true;
 	}

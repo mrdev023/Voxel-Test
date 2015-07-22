@@ -23,15 +23,6 @@ public abstract class World {
 		this.seed= seed;
 		this.octave = octave;
 		this.amplitude = amplitude;
-		for(int x = 0;x < SIZE;x++){
-			for(int y = 0;y < HEIGHT;y++){
-				for(int z = 0;z < SIZE;z++){
-					Chunk ch = new Chunk(x,y,z,this);
-					chunks.add(ch);
-				}
-			}
-		}
-		for(Chunk ch : chunks)ch.createChunk(this);
 	}
 	
 	public static long updateWorldTime = 0;
