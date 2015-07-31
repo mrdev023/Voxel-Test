@@ -35,7 +35,7 @@ class Generate implements Runnable {
 		long current = System.currentTimeMillis();
 		long elapsed1 = 0;
 		boolean IsError = true;
-		Noise noise = new Noise(world.seed, world.octave, world.amplitude);;
+		Noise noise = new Noise(world.seed, world.octave, world.amplitude);
 		Random random = new Random(world.seed);
 		Noise colorVariationNoise = new Noise(world.seed,world.octave,2);
 		for (int x = 0; x < chunk.SIZE; x++) {
@@ -87,12 +87,13 @@ class Generate implements Runnable {
 //						}
 					}
 //				}
-				chunk.setGenerated(true);
+				chunk.setGenerated(true,true);
 			}catch (Exception e){
 				e.printStackTrace();
 				IsError = true;
 			}
 		}
+		
 		System.out.println(Thread.currentThread().getName() + " terminated | loop1:" + elapsed1 + "ms loop2:" + (System.currentTimeMillis()-current) + "ms");
 		Thread.currentThread().stop();
 	}

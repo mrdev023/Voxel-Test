@@ -8,4 +8,8 @@ public class LeafBlock extends Block{
 		super(new Color4f(0,0.6f,0,1));
 	}
 	
+	public String toString() {
+		return this.getClass().getSimpleName();  
+	}
+	
 }

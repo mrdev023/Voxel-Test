@@ -8,4 +8,8 @@ public class TransparentBlock extends Block {
 		super(new Color4f(1,1,1,0));
 	}
 	
+	public String toString() {
+		return this.getClass().getSimpleName();  
+	}
+	
 }

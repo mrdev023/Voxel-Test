@@ -5,7 +5,7 @@ import mrdev023.world.*;
 
 public enum GameState {
 
-	MAIN_MENU(new MainMenu()),SOLO_GAME(new SoloGame()),MULTI_GAME(new MultiGame()),OPTION_MENU(new OptionMenu()),ABOUT_MENU(new AboutMenu());
+	MAIN_MENU(new MainMenu()),OPTION_MENU(new OptionMenu()),ABOUT_MENU(new AboutMenu()),SOLO_GAME(new SoloGame()),MULTI_GAME(new MultiGame());
 	
 	GameInterface gameInterface;
 	
@@ -39,5 +39,13 @@ public enum GameState {
 
 	public void updateKeyboard() {
 		this.gameInterface.updateKeyboard();
+	}
+	
+	public void updateGUI() {
+		this.gameInterface.updateGUI();
+	}
+	
+	public void init() {
+		this.gameInterface.init();
 	}
 }

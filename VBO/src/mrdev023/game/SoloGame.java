@@ -7,9 +7,10 @@ import org.lwjgl.opengl.*;
 
 import mrdev023.blocks.*;
 import mrdev023.game.gamestate.*;
-import mrdev023.gameEngine.*;
+import mrdev023.gameengine.*;
 import mrdev023.math.*;
 import mrdev023.rendering.*;
+import mrdev023.rendering.gui.*;
 import mrdev023.update.*;
 import mrdev023.world.*;
 
@@ -20,7 +21,7 @@ public class SoloGame extends Game implements GameInterface{
 	private static Vector3f selectedVector = new Vector3f(0,0,0);
 	
 	public SoloGame() {
-		super(new MultiWorld(0,120,50));
+		super(null);
 	}
 
 	public void render(){
@@ -55,6 +56,10 @@ public class SoloGame extends Game implements GameInterface{
 
 	public void renderGUI() {
 	
+	}
+	
+	public void updateGUI() {
+
 	}
 
 	public void destroyGameState() {
@@ -127,25 +132,10 @@ public class SoloGame extends Game implements GameInterface{
 		xDir = 0;
 		yDir = 0;
 		zDir = 0;
-		while(Keyboard.next()){
-			if(Keyboard.getEventKeyState()){
-				if(Keyboard.getEventKey() == Keyboard.KEY_ESCAPE){
-					GameEngine.setRunning(false);
-				}
-				if(Keyboard.getEventKey() == Keyboard.KEY_F2){
-					Mouse.setGrabbed(!Mouse.isGrabbed());
-				}
-				if(Keyboard.getEventKey() == Keyboard.KEY_F5){
-					Camera.setPosition(new Vector3f(0,2,0));
-				}
-				if(Keyboard.getEventKey() == Keyboard.KEY_X){
-					Camera.noClip = !Camera.noClip;
-				}
-			}else{
-				
-			}
-			
-		}
+		if (Update.keyboardButtonPressed(Keyboard.KEY_ESCAPE))GameEngine.changeGameState(GameState.MAIN_MENU);
+		if (Update.keyboardButtonPressed(Keyboard.KEY_F2)) Mouse.setGrabbed(!Mouse.isGrabbed());
+		if (Update.keyboardButtonPressed(Keyboard.KEY_F5)) Camera.setPosition(new Vector3f(0, 2, 0));
+		if (Update.keyboardButtonPressed(Keyboard.KEY_X)) Camera.noClip = !Camera.noClip;
 		
 		if(Mouse.isGrabbed()){			
 			if(Camera.getRotation().x < -90) Camera.getRotation().x = -90;
@@ -198,5 +188,9 @@ public class SoloGame extends Game implements GameInterface{
 			GameEngine.setRunning(false);
 		}
 		
+	}
+
+	public void init() {
+		setWorld(new SoloWorld(0,120,50));
 	}
 }

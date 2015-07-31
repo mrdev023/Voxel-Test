@@ -3,7 +3,7 @@ package mrdev023.rendering;
 import static org.lwjgl.opengl.GL11.*;
 import mrdev023.blocks.*;
 import mrdev023.entity.*;
-import mrdev023.gameEngine.*;
+import mrdev023.gameengine.*;
 import mrdev023.main.*;
 import mrdev023.math.*;
 import mrdev023.world.*;

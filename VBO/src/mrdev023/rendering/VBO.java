@@ -37,7 +37,7 @@ public class VBO {
 	 */
 	
 	public void clearBuffer(){
-		buffer.clear();
+		floatlist.clear();
 	}
 	
 	public void addDataByFloatArray(float[] a){

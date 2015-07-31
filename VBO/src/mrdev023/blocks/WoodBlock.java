@@ -8,4 +8,8 @@ public class WoodBlock extends Block{
 		super(c);
 	}
 	
+	public String toString() {
+		return this.getClass().getSimpleName();  
+	}
+	
 }

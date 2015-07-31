@@ -11,5 +11,7 @@ public interface GameInterface {
 	public World getWorld();
 	public void updateMouse();
 	public void updateKeyboard();
+	public void updateGUI();
+	public void init();
 	
 }

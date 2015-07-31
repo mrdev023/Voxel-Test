@@ -1,7 +1,10 @@
 package mrdev023.world;
 
+import java.io.*;
 import java.util.*;
 
+import mrdev023.io.*;
+import mrdev023.math.*;
 import mrdev023.rendering.*;
 import mrdev023.world.chunk.*;
 
@@ -24,8 +27,26 @@ public class SoloWorld extends World{
 			for(int k = 0;k <= delta_z;k++){
 //				for(int j = 0; j < HEIGHT; j++){
 					if(getChunk((xa + i), 0, (za + k)) != null)continue;
-					Chunk ch = new Chunk((xa + i),0,(za + k),this);
-					chunks.add(ch);
+					if(IO.chunkIsSaved(new Vector3i((xa + i),0,(za + k)),"soloWorld")){
+						try {
+							Chunk ch = IO.loadChunk(new Vector3i((xa + i),0,(za + k)),"soloWorld");
+							chunks.add(ch);
+						} catch (ClassNotFoundException e1) {
+							if(getChunk((xa + i), 0, (za + k)) != null)continue;
+							Chunk ch = new Chunk((xa + i),0,(za + k),this);
+							chunks.add(ch);
+							System.err.println(e1.getMessage());
+						} catch (IOException e1) {
+							if(getChunk((xa + i), 0, (za + k)) != null)continue;
+							Chunk ch = new Chunk((xa + i),0,(za + k),this);
+							chunks.add(ch);
+							e1.printStackTrace();
+						}
+					}else{
+						if(getChunk((xa + i), 0, (za + k)) != null)continue;
+						Chunk ch = new Chunk((xa + i),0,(za + k),this);
+						chunks.add(ch);
+					}
 //				}
 			}
 		}

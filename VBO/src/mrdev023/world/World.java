@@ -164,6 +164,16 @@ public abstract class World {
 		return VIEW_CHUNK;
 	}
 	
+	public static void printBlockArray(Block[][][] blocks){
+		for(int x = 0; x < blocks.length;x++){
+			for(int y = 0; y < blocks[x].length;y++){
+				for(int z = 0; z < blocks[x][y].length;z++){
+					System.out.println(blocks[x][y][z]);
+				}
+			}
+		}
+	}
+	
 	public void destroyWorld(){
 		for(Chunk c : chunks){
 			c.destroyChunk();

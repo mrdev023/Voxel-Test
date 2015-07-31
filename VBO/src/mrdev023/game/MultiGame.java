@@ -7,7 +7,7 @@ import org.lwjgl.opengl.*;
 
 import mrdev023.blocks.*;
 import mrdev023.game.gamestate.*;
-import mrdev023.gameEngine.*;
+import mrdev023.gameengine.*;
 import mrdev023.math.*;
 import mrdev023.rendering.*;
 import mrdev023.update.*;
@@ -19,7 +19,7 @@ public class MultiGame extends Game implements GameInterface{
 	private static Vector3f selectedVector = new Vector3f(0,0,0);
 	
 	public MultiGame() {
-		super(new MultiWorld(0,120,50));
+		super(null);
 	}
 
 	public void render(){
@@ -58,6 +58,10 @@ public class MultiGame extends Game implements GameInterface{
 
 	public void destroyGameState() {
 		destroyGame();
+	}
+	
+	public void init() {
+		setWorld(new MultiWorld(0,120,50));
 	}
 	
 	private static void renderBlock(int x,int y ,int z){
@@ -195,6 +199,10 @@ public class MultiGame extends Game implements GameInterface{
 		if(Display.isCloseRequested()){
 			GameEngine.setRunning(false);
 		}
+		
+	}
+
+	public void updateGUI() {
 		
 	}
 

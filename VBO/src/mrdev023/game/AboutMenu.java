@@ -1,6 +1,7 @@
 package mrdev023.game;
 
 import mrdev023.game.gamestate.*;
+import mrdev023.rendering.gui.*;
 import mrdev023.world.*;
 
 public class AboutMenu implements GameInterface{
@@ -30,6 +31,14 @@ public class AboutMenu implements GameInterface{
 	}
 
 	public void updateKeyboard() {
+		
+	}
+
+	public void updateGUI() {
+
+	}
+
+	public void init() {
 		
 	}
 

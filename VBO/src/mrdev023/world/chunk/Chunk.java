@@ -1,13 +1,16 @@
 package mrdev023.world.chunk;
 
+import java.io.*;
+
 import mrdev023.blocks.*;
-import mrdev023.gameEngine.*;
+import mrdev023.gameengine.*;
+import mrdev023.io.*;
 import mrdev023.main.*;
 import mrdev023.math.*;
 import mrdev023.rendering.*;
 import mrdev023.world.*;
 
-public class Chunk {
+public class Chunk{
 
 	public final static int SIZE = 64;
 	private int x, y, z;
@@ -27,6 +30,15 @@ public class Chunk {
 		this.blocks = new Block[SIZE][SIZE][SIZE];
 		vbo = new VBO();
 	}
+	
+	public Chunk(int x, int y, int z) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.world = null;
+		this.blocks = new Block[SIZE][SIZE][SIZE];
+		vbo = new VBO();
+	}
 
 	public void render() {
 		vbo.renderVBO();
@@ -35,7 +47,18 @@ public class Chunk {
 	public void update() {
 
 	}
+	
+	public void setBlocks(Block[][][] blocks){
+		this.blocks = blocks;
+		vbo.clearBuffer();
+		Main.addThread(new LoadChunk(this, world),"Load Chunk");
+		IsCurrentGenerate = true;
+	}
 
+	public Block[][][] getBlocks(){
+		return blocks;
+	}
+	
 	public void createChunk(World world) {
 		this.world = world;
 		Main.addThread(new Generate(this, world),"Create Chunk");
@@ -50,7 +73,7 @@ public class Chunk {
 	public void updateChunk() {
 		vbo.clearBuffer();
 		for (int i = 0; i < SIZE; i++) {
-			for (int j = 0; j < 2; j++) {
+			for (int j = 0; j < SIZE; j++) {
 				for (int k = 0; k < SIZE; k++) {
 					loopChunk(i, j, k);
 				}
@@ -75,8 +98,8 @@ public class Chunk {
 		return z;
 	}
 
-	public Vector3f getPosition() {
-		return new Vector3f(x, y, z);
+	public Vector3i getPosition() {
+		return new Vector3i((int)x, (int)y, (int)z);
 	}
 
 	public Block getBlock(int x, int y, int z) {
@@ -274,8 +297,16 @@ public class Chunk {
 		return IsGenerated;
 	}
 
-	public void setGenerated(boolean g) {
+	public void setGenerated(boolean g,boolean IsGenerate) {
 		IsGenerated = g;
+		if(g && IsGenerate){
+			try {
+				IO.saveChunk(this,"soloWorld");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}	
 
 	public String toString(){

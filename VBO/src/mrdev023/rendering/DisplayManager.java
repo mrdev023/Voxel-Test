@@ -1,18 +1,20 @@
 package mrdev023.rendering;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.*;
-import mrdev023.gameEngine.*;
-import mrdev023.update.*;
 
-import org.lwjgl.input.*;
+import java.util.*;
+
+import mrdev023.gameengine.*;
+
+import org.lwjgl.*;
 import org.lwjgl.opengl.*;
-import org.lwjgl.util.glu.*;
 
 
 public class DisplayManager {
 
 	private static long delta = 0;
 	private static float fov = 45;
+	private static int height = GameEngine.getHeight(),width = GameEngine.getWidth();
 	
 	/**
 	 * @Info Nettoie l'ecran
@@ -67,7 +69,30 @@ public class DisplayManager {
 	 * @Info mets a jour la resolution de l'ecran
 	 */
 	public static void updateDisplay() {
-		glViewport(0, 0, Display.getWidth(), Display.getHeight());
+		width = Display.getDisplayMode().getWidth();
+		height = Display.getDisplayMode().getHeight();
+		glViewport(0, 0, width,height);
+		GameEngine.gameState.updateGUI();
+	}
+	
+	public static DisplayMode[] getDisplayModeArray(){
+		try {
+			ArrayList<DisplayMode> dl = new ArrayList<DisplayMode>();
+			for(DisplayMode d : Display.getAvailableDisplayModes()){
+				if(d.getBitsPerPixel() == 32 && d.getFrequency() == 60){
+					dl.add(d);
+				}
+			}
+			DisplayMode[] dl2 = new DisplayMode[dl.size()];
+			for(int i = 0;i < dl2.length;i++){
+				dl2[i] = dl.get(i);
+			}
+			dl = null;
+			return dl2;
+		} catch (LWJGLException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	public static long getDelta() {
@@ -85,5 +110,23 @@ public class DisplayManager {
 	public static void setFov(float fov) {
 		DisplayManager.fov = fov;
 	}
+
+	public static int getHeight() {
+		return height;
+	}
+
+	public static void setHeight(int height) {
+		DisplayManager.height = height;
+	}
+
+	public static int getWidth() {
+		return width;
+	}
+
+	public static void setWidth(int width) {
+		DisplayManager.width = width;
+	}
+	
+	
 	
 }

@@ -1,10 +1,8 @@
 package mrdev023.main;
 
-
 import java.util.concurrent.*;
-
-import mrdev023.gameEngine.*;
-import mrdev023.network.*;
+import mrdev023.gameengine.*;
+import mrdev023.network.server.*;
 
 public class Main {
 
@@ -20,7 +18,7 @@ public class Main {
 		for(String arg : args){
 			if(arg.equals("-server"))IsServer = true;
 		}
-		
+	
 		if(IsServer){
 			Server.initServer();
 		}else{

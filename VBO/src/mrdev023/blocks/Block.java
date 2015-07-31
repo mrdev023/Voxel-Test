@@ -1,10 +1,17 @@
 package mrdev023.blocks;
 
+import java.io.*;
+
 import mrdev023.math.*;
 
 
 
-public abstract class Block {
+public abstract class Block implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4814279699620370899L;
 
 	public static final Block OAK_WOOD = new OakWoodBlock(),
 						GRASS = new GrassBlock(),
@@ -110,7 +117,7 @@ public abstract class Block {
 		return size;
 	}
 
-		
+	public abstract String toString();
 	
 	
 }
