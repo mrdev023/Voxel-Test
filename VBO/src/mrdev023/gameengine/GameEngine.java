@@ -27,7 +27,7 @@ public class GameEngine {
 	public static GameState gameState = GameState.MAIN_MENU;
 	
 	public static void initWindow(){
-		Main.mainPool = Executors.newWorkStealingPool();
+		Main.mainPool = Executors.newWorkStealingPool(1);
 		try {
 			Display.setTitle(TITLE);
 			Display.setDisplayMode(new DisplayMode(width, height));
@@ -56,12 +56,13 @@ public class GameEngine {
 			DisplayManager.setDelta(current - previous);
 
 			current2 = System.nanoTime();
-			if (elapsed >= 1000 / 60) {
+			if ((float)elapsed >= 1000.0f / 60.0f) {
+				Display.processMessages();
 				Update.updateMouse();
 				Update.updateKeyboard();
 				Update.update();
 				TICKS++;
-				elapsed = 0;
+				elapsed -= (long)(1000.0f/60.0f);
 				timeTicks = System.nanoTime() - current2;
 			} else {
 				DisplayManager.clearScreen();
@@ -71,6 +72,7 @@ public class GameEngine {
 				DisplayManager.render2D();
 				FPS++;
 				timeFps = System.nanoTime() - current2;
+				Display.update(false);
 			}
 
 			if (elapsedInfo >= 1000) {
@@ -84,13 +86,14 @@ public class GameEngine {
 						+ Camera.getPosition().getZ() + " | "
 						+ World.updateWorldTime + " " + DisplayManager.getDelta()
 						+ " | "
+						+ (int)((((float)Runtime.getRuntime().freeMemory()/1024.0)/((float)Runtime.getRuntime().totalMemory()/1024.0f))*100) 
+						+ "% free | "
 						+ Runtime.getRuntime().totalMemory()/1024);
 				FPS = 0;
 				TICKS = 0;
 				elapsedInfo = 0;
 			}
 			
-			Display.update();
 		}
 		destroy();
 	}
