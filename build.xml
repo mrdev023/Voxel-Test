@@ -1,0 +1,38 @@
+<project name="lwjgl-examples">
+
+  <property file="build.properties" />
+  <property name="src.dir" value="src" />
+  <property name="build.dir" value="bin"/>
+  <property name="lwjgl_jars.dir" value="./libs/"/>
+  <property name="lwjgl_natives.dir" value="./libs/"/>
+  <property name="build.sysclasspath" value="last"/>
+
+  <path id="my_cp">
+    <fileset dir="${lwjgl_jars.dir}" includes="lwjgl.jar"/>
+  </path>
+
+  <target name="compile">
+    <mkdir dir="${build.dir}"/>
+    <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="my_cp"/>
+  </target>
+
+  <target name="clean">
+    <delete dir="${build.dir}"/>
+  </target>
+
+  <target name="test" depends="compile">
+    <!--
+      fork="true" seems to be absolutely
+      necessary for the setting of java.library.path
+      to be effective.-->
+
+    <java fork="true" classname="fr/technicalgames/Main">
+      <classpath>
+        <path refid="my_cp"/>
+        <path location="${build.dir}"/>
+      </classpath>
+      <sysproperty key="java.library.path"
+                   value="${lwjgl_natives.dir}"/>
+    </java>
+  </target>
+</project>
